@@ -1,10 +1,11 @@
 import { Card, Input, makeStyles, tokens, Toolbar, ToolbarButton, ToolbarDivider, Tooltip } from "@fluentui/react-components";
-import { FolderAddRegular, FolderAddFilled, bundleIcon, BuildingFactoryRegular, BuildingFactoryFilled, DeleteFilled, DeleteRegular, CopyAddFilled, CopyAddRegular, CopyFilled, CopyRegular, AddSquareRegular, AddSquareFilled, SubtractSquareFilled, SubtractSquareRegular } from "@fluentui/react-icons";
+import { FolderAddRegular, FolderAddFilled, bundleIcon, BuildingFactoryRegular, BuildingFactoryFilled, DeleteFilled, DeleteRegular, CopyFilled, CopyRegular, AddSquareRegular, AddSquareFilled, SubtractSquareFilled, SubtractSquareRegular } from "@fluentui/react-icons";
 import { Collapse } from "@fluentui/react-motion-components-preview";
 import { GroupState } from "./Types";
 import { Item } from "../Item";
 import { ActionBar, Actions } from "../../../ActionBar";
 import { Fragment } from "react/jsx-runtime";
+import { FactoryGrid } from "../FactoryGrid";
 
 export function useGroupView(state: GroupState) {
 
@@ -27,23 +28,26 @@ export function useGroupView(state: GroupState) {
 					<Tooltip content="Add Factory" relationship="label">
 						<ToolbarButton onClick={state.onAddFactory} icon={<FactoryIcon />} />
 					</Tooltip>
-					<ToolbarDivider />
-					<Tooltip content="Clone Folder" relationship="label">
-						<ToolbarButton icon={<CloneIcon />} />
-					</Tooltip>
-					<Tooltip content="Delete Folder" relationship="label">
-						<ToolbarButton icon={<DeleteIcon />} />
-					</Tooltip>
+					{!state.isWorld && <Fragment>
+						<ToolbarDivider />
+						<Tooltip content="Clone Folder" relationship="label">
+							<ToolbarButton onClick={state.onCloneGroup} icon={<CloneIcon />} />
+						</Tooltip>
+						<Tooltip content="Delete Folder" relationship="label">
+							<ToolbarButton onClick={state.onDeleteGroup} icon={<DeleteIcon />} />
+						</Tooltip>
+					</Fragment>}
 				</Toolbar>
 			</Actions>
 			<div className={style.collapse}>
-				<ToolbarButton onClick={state.onToggleCollapse} icon={state.isCollapsed ? <IsCollapsedIcon /> : <IsOpenIcon />} />
+				{!state.isWorld && <ToolbarButton onClick={state.onToggleCollapse} icon={state.isCollapsed ? <IsCollapsedIcon /> : <IsOpenIcon />} />}
 				<Input value={state.name} onChange={state.onNameChange} appearance="filled-lighter" placeholder="Unnamed" />
 			</div>
 		</ActionBar>
 		<Collapse visible={!state.isCollapsed}>
 			<div className={style.list}>
-				{state.children.map(item => <Item key={item.id} item={item} />)}
+				<FactoryGrid factories={state.factories} />
+				{state.childGroups.map(item => <Item key={item.id} item={item} />)}
 			</div>
 		</Collapse>
 	</Card>

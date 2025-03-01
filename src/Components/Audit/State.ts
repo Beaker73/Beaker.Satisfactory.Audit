@@ -4,7 +4,8 @@ import { AuditProps } from "./Types";
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function useAuditState(_props: AuditProps) {
 
-	const [state, dispatch] = useWorldState();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const [state, _dispatch] = useWorldState();
 
 	return {
 		world: state.world,

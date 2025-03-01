@@ -11,6 +11,7 @@ export function StateProvider(props: PropsWithChildren<object>) {
 			type: "group",
 			name: "Unnamed World",
 			children: [],
+			multiplier: 1,
 		},
 	});
 

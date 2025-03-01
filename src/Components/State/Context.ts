@@ -9,6 +9,7 @@ export const stateContext = createContext<StateContext>([
 			type: "group",
 			name: "Unnamed World",
 			children: [],
+			multiplier: 1,
 		},
 	},
 	() => {}

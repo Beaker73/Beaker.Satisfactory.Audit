@@ -26,6 +26,7 @@ function apply(state: State, payload: AddGroupPayload) {
 				type: "group",
 				name,
 				children: [],
+				multiplier: 1,
 			});
 		}
 	});

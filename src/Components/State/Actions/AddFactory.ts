@@ -24,6 +24,11 @@ function apply(state: State, payload: AddFactoryPayload) {
 			item.children.push({
 				id: v4(),
 				type: "factory",
+				sloops: 0,
+				clockSpeed: 1,
+				inputs: [],
+				outputs: [],
+				multiplier: 1,
 			});
 		}
 	});

@@ -1,5 +1,7 @@
 import { AddFactoryAction } from "./Actions/AddFactory";
 import { AddGroupAction } from "./Actions/AddGroup";
+import { CloneItemAction } from "./Actions/CloneItem";
+import { DeleteItemAction } from "./Actions/DeleteItem";
 import { UpdateNameOfGroupAction } from "./Actions/UpdateNameOfGroup";
 
 export type Action<TType extends string = string, TPayload extends object = object> = {
@@ -10,7 +12,7 @@ export type Action<TType extends string = string, TPayload extends object = obje
 export type ApplyAction<TPayload extends object = object> = (state: State, payload: TPayload) => void;
 
 export type ActionData<TAction extends Action = Action> = {
-	type: string,
+	type: TAction extends Action<infer TType> ? TType : never,
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	apply: ApplyAction<TAction extends Action<infer _,infer TPlayload> ? TPlayload : never>,
 }
@@ -19,6 +21,8 @@ export type StateAction =
 	| UpdateNameOfGroupAction
 	| AddGroupAction
 	| AddFactoryAction
+	| DeleteItemAction
+	| CloneItemAction
 	;
 
 export type State = {
@@ -31,15 +35,23 @@ export type StateContext = [
 ];
 
 export type Group = {
-	type: "group",
 	id: string,
+	type: "group",
 	name?: string,
 	children: Item[],
+	multiplier: number,
 }
 
 export type Factory = {
-	type: "factory",
 	id: string,
+	type: "factory",
+	sloops: number,
+	clockSpeed: number,
+	buildingKey?: string,
+	recipeKey?: string,
+	inputs: [],
+	outputs: [],
+	multiplier: number,
 }
 
 export type Item = Group | Factory;

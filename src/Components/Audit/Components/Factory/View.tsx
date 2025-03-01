@@ -12,10 +12,10 @@ export function useFactoryView(state: FactoryState) {
 		<ActionBar>
 			<Actions>
 				<Tooltip content="Clone Factory" relationship="label">
-					<ToolbarButton icon={<CloneIcon />} />
+					<ToolbarButton onClick={state.onCloneFactory} icon={<CloneIcon />} />
 				</Tooltip>
 				<Tooltip content="Delete Factory" relationship="label">
-					<ToolbarButton icon={<DeleteIcon />} />
+					<ToolbarButton onClick={state.onDeleteFactory} icon={<DeleteIcon />} />
 				</Tooltip>
 			</Actions>
 		</ActionBar>
