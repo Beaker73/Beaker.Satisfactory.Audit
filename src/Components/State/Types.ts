@@ -40,6 +40,7 @@ export type Group = {
 	name?: string,
 	children: Item[],
 	multiplier: number,
+	tags: string[],
 }
 
 export type Factory = {
@@ -52,6 +53,7 @@ export type Factory = {
 	inputs: [],
 	outputs: [],
 	multiplier: number,
+	tags: string[],
 }
 
 export type Item = Group | Factory;

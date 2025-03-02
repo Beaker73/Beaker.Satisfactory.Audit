@@ -1,8 +1,9 @@
 import { createTableColumn, DataGrid, DataGridBody, DataGridCell, DataGridHeader, DataGridHeaderCell, DataGridRow, ToolbarButton, Tooltip } from "@fluentui/react-components";
-import { CopyFilled, CopyRegular, DeleteFilled, DeleteRegular, bundleIcon } from "@fluentui/react-icons";
-import { FactoryGridState } from "./Types";
-import { Factory } from "../../../State/Types";
+import { bundleIcon, CopyFilled, CopyRegular, DeleteFilled, DeleteRegular } from "@fluentui/react-icons";
 import { Fragment } from "react/jsx-runtime";
+import { RecipePicker } from "../../../RecipePicker";
+import type { Factory } from "../../../State/Types";
+import type { FactoryGridState } from "./Types";
 
 export function useFactoryGridView(state: FactoryGridState) {
 
@@ -10,12 +11,12 @@ export function useFactoryGridView(state: FactoryGridState) {
 
 	const columns = useFactoryGridColumns(state);
 
-	return <DataGrid columns={columns} items={factories} 
-			size="small" sortable
-			getRowId={factory => factory.id}>
+	return <DataGrid columns={columns} items={factories}
+		size="small" sortable
+		getRowId={factory => factory.id}>
 		<DataGridHeader>
 			<DataGridRow>
-				{({renderHeaderCell}) => <DataGridHeaderCell>
+				{({ renderHeaderCell }) => <DataGridHeaderCell>
 					{renderHeaderCell()}
 				</DataGridHeaderCell>}
 			</DataGridRow>
@@ -34,12 +35,12 @@ function useFactoryGridColumns(state: FactoryGridState) {
 
 	const DeleteIcon = bundleIcon(DeleteFilled, DeleteRegular);
 	const CloneIcon = bundleIcon(CopyFilled, CopyRegular);
-	
+
 	return [
 		createTableColumn<Factory>({
 			columnId: "recipe",
 			renderHeaderCell: () => "Recipe",
-			renderCell: () => "",
+			renderCell: () => <RecipePicker />
 		}),
 		createTableColumn<Factory>({
 			columnId: "building",
