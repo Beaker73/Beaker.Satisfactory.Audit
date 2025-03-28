@@ -1,7 +1,7 @@
 import type { PositioningShorthand } from "@fluentui/react-components";
-import { makeStyles, mergeClasses, Popover, PopoverSurface, PopoverTrigger, tokens } from "@fluentui/react-components";
+import { makeStyles, mergeClasses, OverlayDrawer, tokens } from "@fluentui/react-components";
 import { ChevronDownRegular } from "@fluentui/react-icons";
-import type { ReactNode } from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import type { PickerState } from "./Types";
 
 const position: PositioningShorthand = {
@@ -10,22 +10,22 @@ const position: PositioningShorthand = {
 };
 
 export function usePickerView<T>(state: PickerState<T>, children: ReactNode) {
+
+	const [isOpen, setIsOpen] = useState(false);
+	const onToggleOpen = useCallback(() => setIsOpen(io => !io), []);
+
 	const style = usePickerStyles();
-	return <Popover positioning={position}>
-		<PopoverTrigger>
-			<div className={mergeClasses(style.pickerField, state.isSubtle ? style.pickerFieldSubtle : style.pickerFieldDefault)}>
-				<div className={style.pickerFieldDefaultContent}>
-					sdfsdfs
-				</div>
-				<div className={style.pickerFieldDefaultIcon}>
-					<ChevronDownRegular />
-				</div>
-			</div>
-		</PopoverTrigger>
-		<PopoverSurface>
+	return <div className={mergeClasses(style.pickerField, state.isSubtle ? style.pickerFieldSubtle : style.pickerFieldDefault)}>
+		<div className={style.pickerFieldDefaultContent} onClick={onToggleOpen}>
+			sdfsdfs
+		</div>
+		<div className={style.pickerFieldDefaultIcon}>
+			<ChevronDownRegular />
+		</div>
+		<OverlayDrawer open={isOpen}>
 			{children}
-		</PopoverSurface>
-	</Popover>
+		</OverlayDrawer>
+	</div>
 }
 
 const usePickerStyles = makeStyles({

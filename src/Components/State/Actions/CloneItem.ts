@@ -1,7 +1,7 @@
 import { v4 } from "uuid";
-import { isGroup, visitItems } from "../Helpers";
-import { Action, ActionData, State } from "../Types";
 import { deepClone } from "../../../Helpers/Object";
+import { isGroup, visitItems } from "../Helpers";
+import type { Action, ActionData, State } from "../Types";
 
 export type CloneItemAction = Action<"cloneItem", CloneItemPayload>;
 

@@ -1,5 +1,5 @@
 import { isGroup, visitItems } from "../Helpers";
-import { Action, ActionData, State } from "../Types";
+import type { Action, ActionData, State } from "../Types";
 
 export type DeleteItemAction = Action<"deleteItem", DeleteItemPayload>;
 

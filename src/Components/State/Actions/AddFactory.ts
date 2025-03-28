@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 import { isGroup, visitItem } from "../Helpers";
-import { Action, ActionData, State } from "../Types";
+import type { Action, ActionData, State } from "../Types";
 
 export type AddFactoryAction = Action<"addFactory", AddFactoryPayload>;
 
@@ -29,6 +29,7 @@ function apply(state: State, payload: AddFactoryPayload) {
 				inputs: [],
 				outputs: [],
 				multiplier: 1,
+				tags: [],
 			});
 		}
 	});

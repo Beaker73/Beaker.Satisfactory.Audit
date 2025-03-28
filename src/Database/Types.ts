@@ -1,13 +1,16 @@
+import type { Data } from "./Hooks";
+
 export type Database = {
-	items: Record<string, Item>,
-	recipes: Record<string, Recipe>,
-	schematics: Record<string, Schematic>,
-	generators: Record<string, Generator>,
-	resources: Record<string, Resource>,
-	miners: Record<string, Miner>,
-	buildings: Record<string, Building>,
+	items: Record<ItemKey, Item>,
+	recipes: Record<RecipeKey, Recipe>,
+	schematics: Record<SchematicKey, Schematic>,
+	generators: Record<GeneratorKey, Generator>,
+	resources: Record<ResourceKey, Resource>,
+	miners: Record<MinerKey, Miner>,
+	buildings: Record<BuildingKey, Building>,
 }
 
+export type ItemKey = keyof Data["items"];
 export type Item = {
 	slug: string,
 	icon: string,
@@ -27,6 +30,7 @@ export type Item = {
 	}
 }
 
+export type RecipeKey = keyof Data["recipes"];
 export type Recipe = {
 	slug: string,
 	name: string,
@@ -38,34 +42,36 @@ export type Recipe = {
 	inWorkshop: boolean,
 	inMachine: boolean,
 	manualTimeMultiplier: number,
-	ingredients: { item: string, amount: number }[],
-	products: { item: string, amount: number }[],
-	producedIn: string[],
+	ingredients: { item: ItemKey, amount: number }[],
+	products: { item: ItemKey, amount: number }[],
+	producedIn: BuildingKey[],
 	isVariablePower: boolean,
 	minPower: number,
 	maxPower: number,
 }
 
+export type SchematicKey = keyof Data["schematics"];
 export type Schematic = {
 	className: string,
 	type: string,
 	name: string,
 	slug: string,
 	icon: string,
-	cost: { item: string, amount: number }[],
+	cost: { item: ItemKey, amount: number }[],
 	unlock: {
-		recipes: string[],
+		recipes: RecipeKey[],
 		scannerResources: string[],
 		inventorySlots: number,
-		giveItems: { item: string, amount: number }[],
+		giveItems: { item: ItemKey, amount: number }[],
 	},
-	requiredSchematics: string[],
+	requiredSchematics: SchematicKey[],
 	tier: number,
 	time: number,
 	mam: boolean,
 	alternate: boolean,
 }
 
+export type GeneratorKey = keyof Data["generators"];
 export type Generator = {
 	className: string,
 	fuel: string[],
@@ -74,8 +80,9 @@ export type Generator = {
 	waterToPowerRatio: number,
 }
 
+export type ResourceKey = keyof Data["resources"];
 export type Resource = {
-	item: string,
+	item: ItemKey,
 	pingColor: {
 		r: number,
 		g: number,
@@ -85,15 +92,17 @@ export type Resource = {
 	speed: number,
 }
 
+export type MinerKey = keyof Data["miners"];
 export type Miner = {
 	className: string,
-	allowedResources: string[],
+	allowedResources: ResourceKey[],
 	allowLiquids: boolean,
 	allowSolids: boolean,
 	itemsPerCycle: number,
 	extractCycleTime: number,
 }
 
+export type BuildingKey = keyof Data["buildings"];
 export type Building = {
 	slug: string,
 	icon: string,

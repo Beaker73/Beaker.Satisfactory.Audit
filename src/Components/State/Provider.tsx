@@ -1,7 +1,8 @@
-import { PropsWithChildren, useReducer } from "react";
+import type { PropsWithChildren } from "react";
+import { useReducer } from "react";
+import { v4 } from "uuid";
 import { stateContext } from "./Context";
 import { reducer } from "./Reducer";
-import { v4 } from "uuid";
 
 export function StateProvider(props: PropsWithChildren<object>) {
 
@@ -12,6 +13,7 @@ export function StateProvider(props: PropsWithChildren<object>) {
 			name: "Unnamed World",
 			children: [],
 			multiplier: 1,
+			tags: [],
 		},
 	});
 

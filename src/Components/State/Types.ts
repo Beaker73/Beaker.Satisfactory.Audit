@@ -1,8 +1,5 @@
-import { AddFactoryAction } from "./Actions/AddFactory";
-import { AddGroupAction } from "./Actions/AddGroup";
-import { CloneItemAction } from "./Actions/CloneItem";
-import { DeleteItemAction } from "./Actions/DeleteItem";
-import { UpdateNameOfGroupAction } from "./Actions/UpdateNameOfGroup";
+import type { Action as StateAction } from "./.ActionType.g";
+export type { Action as StateAction } from "./.ActionType.g";
 
 export type Action<TType extends string = string, TPayload extends object = object> = {
 	type: TType;
@@ -16,14 +13,6 @@ export type ActionData<TAction extends Action = Action> = {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	apply: ApplyAction<TAction extends Action<infer _,infer TPlayload> ? TPlayload : never>,
 }
-
-export type StateAction =
-	| UpdateNameOfGroupAction
-	| AddGroupAction
-	| AddFactoryAction
-	| DeleteItemAction
-	| CloneItemAction
-	;
 
 export type State = {
 	world: Group;

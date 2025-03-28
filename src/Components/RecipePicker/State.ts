@@ -10,25 +10,39 @@ export function useRecipePickerState(props: RecipePickerProps) {
 
 	const database = useDatabase();
 	const recipes = useMemo(() => {
+
+		console.debug("Building recipe list");
 		
 		const recipes = Object.values(database.recipes).filter(r => r.inMachine)
 		const grouped = groupBy(recipes, r => r.products.map(p => p.item))
-		const sorted = Object.entries(grouped)
-			.sort((a, b) => a[0].localeCompare(b[0]));
+
+		// now merge miners into the list
+		for(const miner of Object.values(database.miners)) {
+			const itemKeys = miner.allowedResources.map(r => database.resources[r].item);
+			for(const itemKey of itemKeys) {
+				if(itemKey in grouped) {
+					//
+				}
+			}
+		}
+
+		const sorted = objectEntries(grouped)
+			.sort((a, b) => database.items[a[0]].slug.localeCompare(database.items[b[0]].slug));
 
 		return sorted.map(([key, recipes]) => {
 			return {
 				item: database.items[key],
-				recipes,
-				buildings: Object.entries(groupBy(recipes, r => r.producedIn))
+				recipes: recipes.sort((a, b) => a.slug.localeCompare(b.slug)),
+				buildings: objectEntries(groupBy(recipes, r => r.producedIn))
 					.map(([key, recipes]) => ({ 
 						building: database.buildings[key], 
-						recipes 
+						recipes: recipes.sort((a, b) => a.slug.localeCompare(b.slug))
 					}))
+					.sort((a, b) => buildingOrder.indexOf(a.building.className) - buildingOrder.indexOf(b.building.className))
 			}
 		});
 
-	}, [database.buildings, database.items, database.recipes]);
+	}, [database.buildings, database.items, database.miners, database.recipes, database.resources]);
 
 	return {
 		recipes,
@@ -40,8 +54,8 @@ export function useRecipePickerState(props: RecipePickerProps) {
 	}
 }
 
-function groupBy<T>(items: T[], keySelector: (item: T) => string | string[]) {
-	const grouped: Record<string, T[]> = {};
+function groupBy<T, K extends string = string>(items: T[], keySelector: (item: T) => K | K[]) {
+	const grouped = {} as Record<K, T[]>;
 
 	for (const item of items) {
 		const keys = keySelector(item);
@@ -56,4 +70,21 @@ function groupBy<T>(items: T[], keySelector: (item: T) => string | string[]) {
 	}
 
 	return grouped;
+}
+
+const buildingOrder = [
+	"Desc_SmelterMk1_C",
+	"Desc_FoundryMk1_C",
+	"Desc_ConstructorMk1_C",
+	"Desc_AssemblerMk1_C",
+	"Desc_ManufacturerMk1_C",
+	"Desc_OilRefinery_C",
+	"Desc_Packager_C",
+	"Desc_Blender_C",
+	"Desc_QuantumEncoder_C",
+	"Desc_Converter_C",
+];
+
+function objectEntries<T, K extends string = string>(obj: Record<K, T>) {
+	return Object.entries(obj) as [K, T][];
 }
