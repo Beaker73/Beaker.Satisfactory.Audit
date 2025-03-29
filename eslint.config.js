@@ -6,7 +6,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-	{ ignores: ['dist'] },
+	{ ignores: ['dist', '.fttemplates'] },
 	{
 		extends: [js.configs.recommended, ...tseslint.configs.recommended],
 		files: ['**/*.{ts,tsx}'],
@@ -28,7 +28,7 @@ export default tseslint.config(
 			],
 			'@stylistic/indent': ['error', 'tab'],
 			'@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
-			'@stylistic/brace-style': ['error', 'stroustrup'],
+			'@stylistic/brace-style': ['error', 'allman', { allowSingleLine: true }],
 			'@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
 		},
 	},

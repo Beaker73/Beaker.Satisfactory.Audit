@@ -1,22 +1,31 @@
-import "./App.css"
 import { FluentProvider, webLightTheme } from '@fluentui/react-components';
-import { Shell } from "./Components/Shell";
-import { ShellHeader } from "./Components/Shell/Components/ShellHeader";
-import { ShellContent } from "./Components/Shell/Components/ShellContent";
-import { Audit } from "./Components/Audit";
+import "./App.css";
+import { ActivePage } from './Components/ActivePage';
 import { Header } from "./Components/Header";
+import { Shell } from "./Components/Shell";
+import { ShellContent } from "./Components/Shell/Components/ShellContent";
+import { ShellHeader } from "./Components/Shell/Components/ShellHeader";
+import { ShellTotals } from './Components/Shell/Components/ShellTotals';
+import { ShellTree } from "./Components/Shell/Components/ShellTree";
 import { StateProvider } from "./Components/State/Provider";
+import { WorldTree } from "./Components/WorldTree";
 
-export function App() {
+export function App() 
+{
 	return <FluentProvider theme={webLightTheme}>
 		<StateProvider>
 			<Shell>
+				<ShellTree>
+					<WorldTree />
+				</ShellTree>
 				<ShellContent>
-					<Audit />
+					<ActivePage />
 				</ShellContent>
 				<ShellHeader>
 					<Header />
 				</ShellHeader>
+				<ShellTotals>
+				</ShellTotals>
 			</Shell>
 		</StateProvider>
 	</FluentProvider>

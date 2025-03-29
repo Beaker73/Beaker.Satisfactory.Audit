@@ -1,9 +1,10 @@
-import { ReactNode } from "react";
-import { ShellState } from "./Types";
 import { makeStyles } from "@fluentui/react-components";
+import type { ReactNode } from "react";
+import type { ShellState } from "./Types";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function useShellView(_state: ShellState, children: ReactNode) {
+ 
+export function useShellView(_state: ShellState, children: ReactNode) 
+{
 	const styles = useShellStyles();
 	return <div className={styles.root}>
 		{children}
@@ -18,8 +19,8 @@ const useShellStyles = makeStyles({
 		left: 0,
 		width: "100%",
 		height: "100%",
-		gridTemplateColumns: "auto 1fr",
+		gridTemplateColumns: "200px 1fr auto",
 		gridTemplateRows: "auto 1fr",
-		gridTemplateAreas: `"header header" "navigation content"`,
+		gridTemplateAreas: `"header header header" "tree content totals"`,
 	},
 })
