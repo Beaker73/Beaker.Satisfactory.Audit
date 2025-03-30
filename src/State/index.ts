@@ -1,41 +1,51 @@
-import { produce } from "immer";
-import { v4 } from "uuid";
-import { create } from "zustand";
-import type { Element } from "./Element";
-import type { World } from "./Group";
-import { findElementById, findGroupById } from "./Visitor";
+import { useStore } from "zustand";
+import { useProjectStore } from "./ProjectStore";
+import type { WorldStore } from "./WorldStore";
+import { getOrCreateWorldStore } from "./WorldStore";
 
-export type AppState = {
-	root: World;
+export { useProjectStore } from "./ProjectStore";
+export type { ProjectState, ProjectStore } from "./ProjectStore";
+
+export type { WorldState, WorldStore } from "./WorldStore";
+
+export function useWorldStore<U>(selector: (state: WorldStore) => U)
+	: U
+{
+	const activeProjectId = useProjectStore(state => state.activeProjectId);	
+	return useStore(getOrCreateWorldStore(activeProjectId), selector) as U;
 }
 
-export type AppStore = AppState & {
-	addElement: (parentGroupId: string, element: Element) => void;
-	updateName: (elementId: string, name: string) => void;
+let unsubscribe: undefined | (() => void);
+
+
+// special case for the world name, which is also stored in the project store
+// subscribe to the active world store, and when the name changes, update the project stores name aswell
+useProjectStore.subscribe(store => store.activeProjectId, onActiveProjectIdChange);
+function onActiveProjectIdChange(activeProjectId: string)
+{ 
+	// when active project changes, unsubscribe from the previous world store
+	unsubscribe?.();
+	
+	// subscribe to the (new) world store
+	console.debug("Subscribing to world store", activeProjectId);
+	unsubscribe = getOrCreateWorldStore(activeProjectId).subscribe(
+		// when world name changes
+		store => store.elements[store.rootId]?.name,
+		// store that new name in the project store for the matching project
+		name => 
+		{
+			console.debug("Updating project store with new world name", name);
+			useProjectStore.setState(state => 
+			{
+				state.projects[activeProjectId].name = name;
+			});
+		}
+	);
 }
 
-export const useAppStore = create<AppStore>(set => ({
-	root: {
-		type: "group",
-		subType: "world",
-		id: v4(),
-		name: "Unnamed World",
-		children: [],
-	},
+// trigger initial subscription to the world store
+const activeProjectId = useProjectStore.getState().activeProjectId;
+onActiveProjectIdChange(activeProjectId);
 
-	addElement: (parentGroupId: string, element: Element) =>
-		set(produce(state => 
-		{
-			const gr = findGroupById(state.root, parentGroupId);
-			if(gr)
-				gr.children.push(element);
-		})),
-
-	updateName: (elementId: string, name: string) =>
-		set(produce(state =>
-		{
-			const el = findElementById(state.root, elementId);
-			if(el)
-				el.name = name;
-		})),
-}));
+// set the active project id in the project store so last used gets updated to now
+useProjectStore.getState().setActiveProjectId(activeProjectId);

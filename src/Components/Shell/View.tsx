@@ -21,6 +21,6 @@ const useShellStyles = makeStyles({
 		height: "100%",
 		gridTemplateColumns: "200px 1fr auto",
 		gridTemplateRows: "auto 1fr",
-		gridTemplateAreas: `"header header header" "tree content totals"`,
+		gridTemplateAreas: "\"header header header\" \"tree content totals\"",
 	},
 })

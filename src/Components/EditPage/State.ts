@@ -1,14 +1,15 @@
 import { useShallow } from "zustand/shallow";
-import { useAppStore } from "../../State";
+import { useWorldStore } from "../../State";
+import { findElementById } from "../../State/Visitor";
 import type { EditPageProps } from "./Types";
 
 export function useEditPageState(props: EditPageProps) 
 {
 	const { id } = props
 
-	const {type, subType} = useAppStore(useShallow(state => 
+	const {type, subType} = useWorldStore(useShallow(state => 
 	{
-		const element = state.root.children.find(el => el.id === id);
+		const element = findElementById(state, id);
 		return {
 			type: element?.type,
 			subType: element?.subType,

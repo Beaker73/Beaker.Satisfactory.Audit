@@ -1,11 +1,13 @@
-import type { Element } from "./Element";
+
+export type GroupView = "tiles" | "details";
 
 export type World = {
 	type: "group",
 	subType: "world",
 	id: string,
 	name: string,
-	children: Element[],
+	children: string[],
+	view: GroupView,
 };
 
 export type Factory = {
@@ -13,10 +15,21 @@ export type Factory = {
 	subType: "factory",
 	id: string,
 	name: string,
-	children: Element[]
+	children: string[]
+	view: GroupView,
+};
+
+export type Folder = {
+	type: "group",
+	subType: "folder",
+	id: string,
+	name: string,
+	children: string[]
+	view: GroupView,
 };
 
 export type Group = 
 	| World
 	| Factory
+	| Folder
 	;

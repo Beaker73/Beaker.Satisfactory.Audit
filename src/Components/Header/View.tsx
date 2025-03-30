@@ -8,6 +8,7 @@ export function useHeaderView(state: HeaderState)
 	const styles = useHeaderStyles();
 	return <div className={styles.root}>
 		<div className={styles.logo}>
+			<img className={styles.logoSvg} alt="logo" src="/logo.svg" />
 			<Text size={600} weight="semibold">Satisfactory Audit</Text>
 		</div>
 		<div className={styles.version}>
@@ -30,13 +31,19 @@ const useHeaderStyles = makeStyles({
 		display: "grid",
 		gridTemplateRows: "auto",
 		gridTemplateColumns: "auto auto 1fr auto",
-		gridTemplateAreas: `"logo version title user"`,
+		gridTemplateAreas: "\"logo version title user\"",
 		padding: `${tokens.spacingVerticalXXS} ${tokens.spacingHorizontalM}`,
 		gridColumnGap: tokens.spacingHorizontalM,
 		alignItems: "center",
 	},
 	logo: {
 		gridArea: "logo",
+	},
+	logoSvg: {
+		width: "32px",
+		height: "32px",
+		marginRight: tokens.spacingHorizontalXS,
+		transform: "translateY(3px)",
 	},
 	version: {
 		gridArea: "version",
