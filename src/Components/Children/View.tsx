@@ -68,7 +68,7 @@ function TilesView({state}: {state: ChildrenState})
 {
 	const styles = useTilesViewStyles();
 
-	return <List className={styles.tiles} navigationMode="items">
+	return <List className={styles.tiles} navigationMode="composite">
 		{state.children?.map(child => <ListItem key={child.id}>
 			<Tile elementId={child.id} />
 		</ListItem> )}

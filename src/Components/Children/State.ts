@@ -18,22 +18,37 @@ export function useChildrenState(props: ChildrenProps)
 
 	console.debug("ChildrenState", children);
 
+	const createGroup = useWorldStore(store => store.createGroup)
 	const canCreateFactory = group?.subType === "world";
-	const createFactory = useWorldStore(store => store.createFactory)
 	const onCreateFactory = useCallback(() => 
 	{ 
 		if(group) 
 		{
-			const factoryId = createFactory(group.id);
+			const factoryId = createGroup(group.id, "factory");
 			navigate(`/edit/${factoryId}`);
 		}
-	}, [createFactory, group]);
+	}, [createGroup, group]);
 
 	const canCreateFolder = true;
-	const onCreateFolder = useCallback(() => {}, []);
+	const onCreateFolder = useCallback(() => 
+	{ 
+		if(group) 
+		{
+			const factoryId = createGroup(group.id, "folder");
+			navigate(`/edit/${factoryId}`);
+		}
+	}, [createGroup, group]);
 
+	const createItem = useWorldStore(store => store.createItem)
 	const canCreateMachine = true; // subType === "factory";
-	const onCreateMachine = useCallback(() => {}, []);
+	const onCreateMachine = useCallback(() =>
+	{ 
+		if(group) 
+		{
+			const itemId = createItem(group.id, "building");
+			navigate(`/edit/${itemId}`);
+		}
+	}, [createItem, group]);
 
 	const changeView = useWorldStore(state => state.changeView);
 	const isTilesView = group?.view === "tiles";

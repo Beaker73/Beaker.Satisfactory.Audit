@@ -33,3 +33,5 @@ export type Group =
 	| Factory
 	| Folder
 	;
+
+export type GroupSubType = Group["subType"];

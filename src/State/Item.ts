@@ -7,3 +7,5 @@ export type Building = {
 
 export type Item =
 	| Building;
+
+export type ItemSubType = Item["subType"];

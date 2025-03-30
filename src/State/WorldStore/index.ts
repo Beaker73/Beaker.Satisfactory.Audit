@@ -3,7 +3,8 @@ import { createStore } from "zustand";
 import { createJSONStorage, persist, subscribeWithSelector } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import type { Element } from "../Element";
-import type { Factory, GroupView } from "../Group";
+import type { Group, GroupSubType, GroupView } from "../Group";
+import type { Item, ItemSubType } from "../Item";
 import { findElementById, findGroupById } from "../Visitor";
 import { migrate } from "./Migrations";
 
@@ -16,7 +17,8 @@ export type WorldStore = WorldState & {
 	addElement: (parentGroupId: string, element: Element) => void;
 	updateName: (elementId: string, name: string) => void;
 	changeView: (groupId: string, view: GroupView) => void;
-	createFactory: (parentGroupId: string) => string,
+	createGroup: (parentGroupId: string, subType: GroupSubType) => string,
+	createItem: (parentGroupId: string, subType: ItemSubType) => string,
 }
 
 const worldStoresById: Record<string, ReturnType<typeof creatWorldStore>> = {};
@@ -82,7 +84,7 @@ function creatWorldStore(worldId: string)
 									el.view = view;
 							}),
 
-						createFactory: (parentGroupId: string) => 
+						createGroup: (parentGroupId: string, subType: GroupSubType) => 
 						{
 							const factoryId = v4();
 							set(state => 
@@ -92,17 +94,38 @@ function creatWorldStore(worldId: string)
 								{
 									const factory = {
 										type: "group",
-										subType: "factory",
+										subType,
 										id: factoryId,
 										name: "Factory",
 										children: [],
 										view: "tiles",
-									} satisfies Factory;
+									} satisfies Group;
 									parentGroup.children.push(factoryId);
 									state.elements[factoryId] = factory;
 								}
 							});
 							return factoryId;
+						},
+
+						createItem: (parentGroupId: string, subType: ItemSubType) => 
+						{
+							const itemId = v4();
+							set(state => 
+							{
+								const parentGroup = findGroupById(state, parentGroupId);
+								if(parentGroup) 
+								{
+									const item = {
+										type: "item",
+										subType,
+										id: itemId,
+										name: "Factory",
+									} satisfies Item;
+									parentGroup.children.push(itemId);
+									state.elements[itemId] = item;
+								}
+							});
+							return itemId;
 						}
 					})),
 				{

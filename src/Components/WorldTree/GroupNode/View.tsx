@@ -11,18 +11,18 @@ export function useGroupNodeView(state: GroupNodeState)
 	if(!group)
 		return null;
 
-	return <Tree navigationMode="treegrid" aria-label={`${group.type} named ${group.name}`} key={group.id}>
-		<TreeItem itemType="branch">
-			<TreeItemLayout actions={
-				<ToolbarButton onClick={state.onEdit} icon={<EditIcon />} />
-			}>
-				{group.name}
-			</TreeItemLayout>
+	return <TreeItem itemType="branch">
+		<TreeItemLayout actions={
+			<ToolbarButton onClick={state.onEdit} icon={<EditIcon />} />
+		}>
+			{group.name}
+		</TreeItemLayout>
+		<Tree navigationMode="treegrid" aria-label={`${group.type} named ${group.name}`} key={group.id}>
 			{childData.map(child => 
 				child.type === "group" ? <GroupNode key={child.id} groupId={child.id} /> : 
 					child.type === "item" ? <ItemNode key={child.id} itemId={child.id} /> 
 						: null
 			)}
-		</TreeItem>
-	</Tree>;
+		</Tree>
+	</TreeItem>;
 }

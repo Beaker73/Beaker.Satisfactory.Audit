@@ -10,7 +10,7 @@ export function useTileView(state: TileState)
 	const style = useTileStyles();
 
 	if(!element) return null;
-	return <Card className={style.root} onClick={onEdit}>
+	return <Card role="gridcell" className={style.root} onClick={onEdit}>
 		<div className={style.tileHeading}>
 			{Icon && <Icon className={style.icon} />}
 			<Text className={style.name}>{element.name}</Text>

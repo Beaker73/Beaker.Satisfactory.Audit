@@ -1,10 +1,14 @@
+import { Tree } from "@fluentui/react-components";
 import { GroupNode } from "./GroupNode";
 import type { WorldTreeState } from "./Types";
 
 export function useWorldTreeView(state: WorldTreeState) 
 {
 	const { rootId } = state;
-	return <GroupNode groupId={rootId} />;
+
+	return <Tree navigationMode="treegrid" aria-label={"The world"}>
+		<GroupNode groupId={rootId} />
+	</Tree>;
 }
 
 
