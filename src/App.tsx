@@ -21,7 +21,7 @@ export function App()
 			</ShellContent>
 			<ShellHeader>
 				<Header />
-			</ShellHeader>
+			</ShellHeader>c
 			<ShellTotals>
 			</ShellTotals>
 		</Shell>

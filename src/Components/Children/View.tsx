@@ -59,7 +59,8 @@ const useChildrenViewStyles = makeStyles({
 });
 
 
-function DetailsView({state}: {state: ChildrenState})
+ 
+function DetailsView(_props: {state: ChildrenState})
 {
 	return null;
 }
