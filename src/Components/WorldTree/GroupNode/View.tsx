@@ -1,5 +1,6 @@
-import { Tree, TreeItem, TreeItemLayout } from "@fluentui/react-components";
+import { ToolbarButton, Tree, TreeItem, TreeItemLayout } from "@fluentui/react-components";
 import { GroupNode } from ".";
+import { EditIcon } from "../../../Helpers/Icons";
 import { ItemNode } from "../ItemNode";
 import type { GroupNodeState } from "./Types";
 
@@ -12,7 +13,9 @@ export function useGroupNodeView(state: GroupNodeState)
 
 	return <Tree navigationMode="treegrid" aria-label={`${group.type} named ${group.name}`} key={group.id}>
 		<TreeItem itemType="branch">
-			<TreeItemLayout>
+			<TreeItemLayout actions={
+				<ToolbarButton onClick={state.onEdit} icon={<EditIcon />} />
+			}>
 				{group.name}
 			</TreeItemLayout>
 			{childData.map(child => 

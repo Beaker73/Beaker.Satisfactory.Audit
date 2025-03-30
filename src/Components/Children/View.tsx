@@ -1,4 +1,4 @@
-import { makeStyles, ToggleButton, tokens, Toolbar, ToolbarButton, Tooltip } from "@fluentui/react-components";
+import { List, ListItem, makeStyles, ToggleButton, tokens, Toolbar, ToolbarButton, Tooltip } from "@fluentui/react-components";
 import { DetailsIcon, FactoryIcon, FolderIcon, RobotIcon, TilesIcon } from "../../Helpers/Icons";
 import { ToolbarCard, ToolbarCommands, ToolbarOptions } from "../ToolbarCard";
 import { Tile } from "./Tile";
@@ -68,9 +68,11 @@ function TilesView({state}: {state: ChildrenState})
 {
 	const styles = useTilesViewStyles();
 
-	return <div className={styles.tiles}>
-		{state.children?.map(child => <Tile elementId={child.id} /> )}
-	</div>
+	return <List className={styles.tiles} navigationMode="items">
+		{state.children?.map(child => <ListItem key={child.id}>
+			<Tile elementId={child.id} />
+		</ListItem> )}
+	</List>
 }
 
 const useTilesViewStyles = makeStyles({

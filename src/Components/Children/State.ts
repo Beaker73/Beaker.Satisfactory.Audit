@@ -1,7 +1,9 @@
 import { navigate } from "raviger";
 import { useCallback } from "react";
+import { useShallow } from "zustand/shallow";
+import { hasValue } from "../../Helpers/Object";
 import { useWorldStore } from "../../State";
-import { findGroupById } from "../../State/Visitor";
+import { findElementById, findGroupById } from "../../State/Visitor";
 import type { ChildrenProps } from "./Types";
 
 export function useChildrenState(props: ChildrenProps)
@@ -9,6 +11,12 @@ export function useChildrenState(props: ChildrenProps)
 	const { groupId } = props;
 
 	const group = useWorldStore(state => findGroupById(state, groupId));
+	const children = useWorldStore(useShallow(state => 
+		group?.children.map(childId => findElementById(state, childId)).filter(hasValue) ?? []
+	));
+
+
+	console.debug("ChildrenState", children);
 
 	const canCreateFactory = group?.subType === "world";
 	const createFactory = useWorldStore(store => store.createFactory)
@@ -34,7 +42,7 @@ export function useChildrenState(props: ChildrenProps)
 	const onDetailsView = useCallback(() => changeView(groupId, "details"), [changeView, groupId]);
 
 	return {
-		group,
+		group, children,
 		isTilesView, onTilesView,
 		isDetailsView, onDetailsView,
 		canCreateFactory, onCreateFactory,
