@@ -1,7 +1,6 @@
-import { List, ListItem, makeStyles, ToggleButton, tokens, Toolbar, ToolbarButton, Tooltip } from "@fluentui/react-components";
+import { makeStyles, ToggleButton, tokens, Toolbar, ToolbarButton, Tooltip } from "@fluentui/react-components";
 import { DetailsIcon, FactoryIcon, FolderIcon, RobotIcon, TilesIcon } from "../../Helpers/Icons";
 import { ToolbarCard, ToolbarCommands, ToolbarOptions } from "../ToolbarCard";
-import { Tile } from "./Tile";
 import type { ChildrenState } from "./Types";
 import { DetailsView } from "./DetailsView";
 import { TilesView } from "./TilesView";

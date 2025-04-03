@@ -1,10 +1,9 @@
 import { createTableColumn, DataGrid, DataGridBody, DataGridHeader, DataGridHeaderCell, DataGridRow, makeStyles, tokens } from "@fluentui/react-components";
-import type { DetailsViewState } from "./Types";
 import { useMemo } from "react";
-import type { Element } from "../../../State/Element"
-import { Item } from "../../../State/Item";
 import { useDatabase } from "../../../Database/Hooks";
-import { RecipeKey } from "../../../Database/Types";
+import type { RecipeKey } from "../../../Database/Types";
+import type { Item } from "../../../State/Item";
+import type { DetailsViewState } from "./Types";
 
 export function useDetailsViewView(state: DetailsViewState)
 {
