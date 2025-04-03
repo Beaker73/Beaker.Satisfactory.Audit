@@ -3,6 +3,8 @@ import { DetailsIcon, FactoryIcon, FolderIcon, RobotIcon, TilesIcon } from "../.
 import { ToolbarCard, ToolbarCommands, ToolbarOptions } from "../ToolbarCard";
 import { Tile } from "./Tile";
 import type { ChildrenState } from "./Types";
+import { DetailsView } from "./DetailsView";
+import { TilesView } from "./TilesView";
 
 export function useChildrenView(state: ChildrenState)
 {
@@ -45,8 +47,8 @@ export function useChildrenView(state: ChildrenState)
 				</Toolbar>
 			</ToolbarOptions>
 		</ToolbarCard>
-		{isDetailsView && <DetailsView state={state} />}
-		{isTilesView && <TilesView state={state} />}
+		{isDetailsView && <DetailsView children={state.children} />}
+		{isTilesView && <TilesView children={state.children} />}
 	</div>;
 }
 
@@ -58,29 +60,3 @@ const useChildrenViewStyles = makeStyles({
 	},
 });
 
-
- 
-function DetailsView(_props: {state: ChildrenState})
-{
-	return null;
-}
-
-function TilesView({state}: {state: ChildrenState})
-{
-	const styles = useTilesViewStyles();
-
-	return <List className={styles.tiles} navigationMode="composite">
-		{state.children?.map(child => <ListItem key={child.id}>
-			<Tile elementId={child.id} />
-		</ListItem> )}
-	</List>
-}
-
-const useTilesViewStyles = makeStyles({
-	tiles: {
-		display: "flex",
-		flexDirection: "row",
-		flexWrap: "wrap",
-		gap: tokens.spacingHorizontalS,
-	}
-})

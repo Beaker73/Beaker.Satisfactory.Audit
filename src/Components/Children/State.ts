@@ -1,4 +1,4 @@
-import { navigate } from "raviger";
+import { useNavigate } from "raviger";
 import { useCallback } from "react";
 import { useShallow } from "zustand/shallow";
 import { hasValue } from "../../Helpers/Object";
@@ -18,6 +18,8 @@ export function useChildrenState(props: ChildrenProps)
 
 	console.debug("ChildrenState", children);
 
+	const navigate = useNavigate();
+
 	const createGroup = useWorldStore(store => store.createGroup)
 	const canCreateFactory = group?.subType === "world";
 	const onCreateFactory = useCallback(() => 
@@ -27,7 +29,7 @@ export function useChildrenState(props: ChildrenProps)
 			const factoryId = createGroup(group.id, "factory");
 			navigate(`/edit/${factoryId}`);
 		}
-	}, [createGroup, group]);
+	}, [createGroup, group, navigate]);
 
 	const canCreateFolder = true;
 	const onCreateFolder = useCallback(() => 
@@ -37,7 +39,7 @@ export function useChildrenState(props: ChildrenProps)
 			const factoryId = createGroup(group.id, "folder");
 			navigate(`/edit/${factoryId}`);
 		}
-	}, [createGroup, group]);
+	}, [createGroup, group, navigate]);
 
 	const createItem = useWorldStore(store => store.createItem)
 	const canCreateMachine = true; // subType === "factory";
@@ -48,7 +50,7 @@ export function useChildrenState(props: ChildrenProps)
 			const itemId = createItem(group.id, "building");
 			navigate(`/edit/${itemId}`);
 		}
-	}, [createItem, group]);
+	}, [createItem, group, navigate]);
 
 	const changeView = useWorldStore(state => state.changeView);
 	const isTilesView = group?.view === "tiles";

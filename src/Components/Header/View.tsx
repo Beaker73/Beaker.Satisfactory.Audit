@@ -1,14 +1,17 @@
 import { Input, makeStyles, Text, tokens, Toolbar, ToolbarButton } from "@fluentui/react-components";
 import { BugRegular, SettingsRegular } from "@fluentui/react-icons";
 import type { HeaderState } from "./Types";
+import { useBasePath } from "raviger";
 
  
 export function useHeaderView(state: HeaderState) 
 {
+	const basePath = useBasePath();
+
 	const styles = useHeaderStyles();
 	return <div className={styles.root}>
 		<div className={styles.logo}>
-			<img className={styles.logoSvg} alt="logo" src="/logo.svg" />
+			<img className={styles.logoSvg} alt="logo" src={`${basePath}/logo.svg`} />
 			<Text size={600} weight="semibold">Satisfactory Audit</Text>
 		</div>
 		<div className={styles.version}>

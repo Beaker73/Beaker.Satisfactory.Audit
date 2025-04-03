@@ -1,4 +1,4 @@
-import { navigate } from "raviger";
+import { useNavigate } from "raviger";
 import { useCallback } from "react";
 import { useWorldStore } from "../../../State";
 import { findElementById } from "../../../State/Visitor";
@@ -9,11 +9,12 @@ export function useTileState(props: TileProps)
 	const { elementId } = props;
 	const element = useWorldStore(state => findElementById(state, elementId));
 
+	const navigate = useNavigate();
 	const onEdit = useCallback(() => 
 	{
 		if(element)
 			navigate(`/edit/${element.id}`);
-	}, [element]);
+	}, [element, navigate]);
 
 	return {
 		element, onEdit,

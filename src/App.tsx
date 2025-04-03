@@ -8,22 +8,25 @@ import { ShellHeader } from "./Components/Shell/Components/ShellHeader";
 import { ShellTotals } from "./Components/Shell/Components/ShellTotals";
 import { ShellTree } from "./Components/Shell/Components/ShellTree";
 import { WorldTree } from "./Components/WorldTree";
+import { RouterProvider } from "raviger";
 
 export function App() 
 {
 	return <FluentProvider theme={webLightTheme}>
-		<Shell>
-			<ShellTree>
-				<WorldTree />
-			</ShellTree>
-			<ShellContent>
-				<ActivePage />
-			</ShellContent>
-			<ShellHeader>
-				<Header />
-			</ShellHeader>c
-			<ShellTotals>
-			</ShellTotals>
-		</Shell>
+		<RouterProvider basePath="/Beaker.Satisfactory.Audit">
+			<Shell>
+				<ShellTree>
+					<WorldTree />
+				</ShellTree>
+				<ShellContent>
+					<ActivePage />
+				</ShellContent>
+				<ShellHeader>
+					<Header />
+				</ShellHeader>
+				<ShellTotals>
+				</ShellTotals>
+			</Shell>
+		</RouterProvider>
 	</FluentProvider>
 }

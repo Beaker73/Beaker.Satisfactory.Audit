@@ -1,4 +1,4 @@
-import { navigate } from "raviger";
+import { useNavigate } from "raviger";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 import { useWorldStore } from "../../../State";
@@ -13,7 +13,8 @@ export function useGroupNodeState(props: GroupNodeProps)
 	const childTypes = useWorldStore(useShallow(store => group?.children.map(childId => findElementById(store, childId)?.type) ?? [] ));
 	const childData = useMemo(() => group?.children.map((childId, index) => ({id: childId, type: childTypes[index]})) ?? [], [group, childTypes]);
 
-	const onEdit = useCallback(() => navigate(`/edit/${groupId}`), [groupId]);
+	const navigate = useNavigate();
+	const onEdit = useCallback(() => navigate(`/edit/${groupId}`), [groupId, navigate]);
 
 	return {
 		group, onEdit,
