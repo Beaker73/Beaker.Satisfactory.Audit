@@ -12,6 +12,7 @@
   "dependencies": {
     "@fluentui/react-components": "^9.60.0",
     "date-fns": "^4.1.0",
+    "fast-memoize": "^2.5.2",
     "immer": "^10.1.1",
     "raviger": "^4.2.0",
     "react": "^18",

@@ -1,20 +1,23 @@
 import { makeStyles, tokens } from "@fluentui/react-components";
+import { useItemPath } from "../Database/Hooks";
 import type { Item } from "../Database/Types";
 
 export type ItemNameProps = {
 	item?: Item,
 }
 
-export function ItemName(props: ItemNameProps) {
+export function ItemName(props: ItemNameProps) 
+{
 	const { item } = props;
 
+	const itemPath = useItemPath();
 	const style = useItemNameStyles();
 
 	if(!item)
 		return null;
 
 	return <div className={style.flex}>
-		<img className={style.icon} src={`/images/${item.icon}_64.png`} width={20} height={20} alt={item.name} />
+		<img className={style.icon} src={itemPath(item)} width={20} height={20} alt={item.name} />
 		{item.name}
 	</div>;
 }

@@ -13,3 +13,24 @@ export function hasValue<T>(value: T | null | undefined): value is NonNullable<T
 {
 	return value !== null && value !== undefined;
 }
+
+export function groupBy<T, K extends string>(list: T[], keyGetter: (item: T) => K | K[]): Record<K, T[]>
+{
+	const map = {} as Record<K, T[]>;
+
+	list.forEach(
+		(item) => 
+		{
+			let keys = keyGetter(item);
+			if(typeof keys === "string")
+				keys = [keys];
+			for(const key of keys)
+			{
+				const collection = map[key] ?? [];
+				collection.push(item);
+				map[key] = collection;
+			}
+		});
+
+	return map;
+}

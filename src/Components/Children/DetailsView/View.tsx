@@ -1,30 +1,15 @@
-import { createTableColumn, DataGrid, DataGridBody, DataGridHeader, DataGridHeaderCell, DataGridRow, makeStyles, tokens } from "@fluentui/react-components";
+import { createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { useMemo } from "react";
-import { useDatabase } from "../../../Database/Hooks";
-import type { RecipeKey } from "../../../Database/Types";
 import type { Item } from "../../../State/Item";
+import { DataGridTemplate } from "../../DataGridTemplate";
+import { RecipePicker } from "../../RecipyPicker";
 import type { DetailsViewState } from "./Types";
 
 export function useDetailsViewView(state: DetailsViewState)
 {
 	const style = useDetailsViewStyles();
-	const columns = useColumns();
-	return <DataGrid columns={columns} items={state.items}>
-		<DataGridHeader>
-			<DataGridRow>
-				{({renderHeaderCell}) => <DataGridHeaderCell className={style.header}>
-					{renderHeaderCell()}
-				</DataGridHeaderCell>}
-			</DataGridRow>
-		</DataGridHeader>
-		<DataGridBody<Item>>
-			{({item}) => <DataGridRow<Item>>
-				{({renderCell}) => <DataGridHeaderCell>
-					{renderCell(item)}
-				</DataGridHeaderCell>}
-			</DataGridRow>}
-		</DataGridBody>
-	</DataGrid>
+	const columns = useColumns(state);
+	return <DataGridTemplate columns={columns} items={state.items} style={style} />
 }
 
 const useDetailsViewStyles = makeStyles({
@@ -33,7 +18,7 @@ const useDetailsViewStyles = makeStyles({
 	}
 })
 
-function useColumns()
+function useColumns(state: DetailsViewState)
 {
 	return useMemo(() => [
 		createTableColumn<Item>({
@@ -45,16 +30,8 @@ function useColumns()
 		createTableColumn<Item>({
 			columnId: "recipy",
 			renderHeaderCell: () => "Recipy",
-			renderCell: (item) => <RecipyName recipyKey={item.recipyKey} />,
+			renderCell: (item) => <RecipePicker value={item.recipeKey} onRecipeChange={state.onRecipeChange} />,
 			compare: (a, b) => a.type.localeCompare(b.type),
 		}),
-	], []);
-}
-
-function RecipyName({recipyKey}: {recipyKey?: RecipeKey })
-{
-	const recipes = useDatabase().recipes;
-	const recipe = recipyKey ? recipes[recipyKey] : undefined;
-
-	return recipe?.name ?? "";
+	], [state.onRecipeChange]);
 }

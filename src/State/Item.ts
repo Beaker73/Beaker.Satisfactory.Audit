@@ -5,7 +5,7 @@ export type Building = {
 	subType: "building",
 	id: string,
 	name: string,
-	recipyKey: RecipeKey,
+	recipeKey: RecipeKey,
 	quantity: number,
 	multiplier: number,
 	somersloops: number,	

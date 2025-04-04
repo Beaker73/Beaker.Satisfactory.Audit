@@ -1,26 +1,29 @@
 import { makeStyles, Tag, tokens } from "@fluentui/react-components";
+import { useDatabase } from "../Database/Hooks";
 import type { Recipe } from "../Database/Types";
 
 export type RecipeNameProps = {
 	recipe: Recipe,
 }
 
-export function RecipeName(props: RecipeNameProps) {
+export function RecipeName(props: RecipeNameProps) 
+{
 	const { recipe: recipy } = props;
 
+	const db = useDatabase();
 	const style = useRecipeNameStyles();
 
 	if(!recipy)
 		return null;
 
-	if(recipy.alternate) {
-		return <span className={style.flex}>
-			<span>{recipy.name.replace("Alternate: ", "")}</span>
-			<Tag size="extra-small">Alternate</Tag>
-		</span>
-	}
+	const itemKey = recipy.products[0].item;
+	const item = db.items[itemKey];
 
-	return <div>{recipy.name}</div>;
+	return <span className={style.flex}>
+		{item && <img src={`${import.meta.env.BASE_URL}/images/${item.icon}_64.png`} width={16} height={16} alt={`Icon for ${item.name}`} />}
+		<span>{recipy.name.replace("Alternate: ", "")}</span>
+		{recipy.alternate && <Tag size="extra-small">Alternate</Tag>}
+	</span>
 }
 
 const useRecipeNameStyles = makeStyles({
