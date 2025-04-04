@@ -1,5 +1,5 @@
 import { makeStyles, tokens } from "@fluentui/react-components";
-import { useItemPath } from "../Database/Hooks";
+import { itemPath } from "../Database/Hooks";
 import type { Item } from "../Database/Types";
 
 export type ItemNameProps = {
@@ -10,7 +10,6 @@ export function ItemName(props: ItemNameProps)
 {
 	const { item } = props;
 
-	const itemPath = useItemPath();
 	const style = useItemNameStyles();
 
 	if(!item)

@@ -120,6 +120,9 @@ function creatWorldStore(worldId: string)
 										subType,
 										id: itemId,
 										name: "Factory",
+										multiplier: 1,
+										quantity: 1,
+										somersloops: 0,
 									} satisfies Item;
 									parentGroup.children.push(itemId);
 									state.elements[itemId] = item;
