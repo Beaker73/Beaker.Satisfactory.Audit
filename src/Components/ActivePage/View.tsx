@@ -1,4 +1,4 @@
-import { makeStyles, tokens } from "@fluentui/react-components";
+import { makeStyles } from "@fluentui/react-components";
 import type { ActivePageState } from "./Types";
 
 export function useActivePageView(state: ActivePageState) 
@@ -12,8 +12,8 @@ export function useActivePageView(state: ActivePageState)
 
 const useActivePageStyles = makeStyles({
 	page: {
-		padding: `${tokens.spacingVerticalL} ${tokens.spacingHorizontalL}`,
+		boxSizing: "content-box",
 		height: "100%",
-		overflowY: "auto"
+		overflowY: "hidden"
 	}
 })

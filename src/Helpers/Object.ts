@@ -34,3 +34,8 @@ export function groupBy<T, K extends string>(list: T[], keyGetter: (item: T) => 
 
 	return map;
 }
+
+export function objectEntries<K extends string | number | symbol, V>(obj: Record<K, V>): [K, V][] 
+{
+	return Object.entries(obj) as [K, V][];
+}

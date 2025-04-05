@@ -1,6 +1,6 @@
 import { makeStyles } from "@fluentui/react-components";
 import type { FluentIcon } from "@fluentui/react-icons";
-import { BotFilled, BotRegular, BuildingFactoryFilled, BuildingFactoryRegular, bundleIcon, createFluentIcon, DeleteFilled, DeleteRegular, DismissFilled, DismissRegular, EarthFilled, EarthRegular, EditFilled, EditRegular, FolderOpenFilled, FolderOpenRegular, GridFilled, GridRegular, GroupListFilled, GroupListRegular, MoreVerticalFilled, MoreVerticalRegular, TextBulletListFilled, TextBulletListRegular } from "@fluentui/react-icons";
+import { BotFilled, BotRegular, BuildingFactoryFilled, BuildingFactoryRegular, bundleIcon, ChevronLeftFilled, ChevronLeftRegular, ChevronRightFilled, ChevronRightRegular, createFluentIcon, DeleteFilled, DeleteRegular, DismissFilled, DismissRegular, EarthFilled, EarthRegular, EditFilled, EditRegular, FolderOpenFilled, FolderOpenRegular, GridFilled, GridRegular, GroupListFilled, GroupListRegular, MoreVerticalFilled, MoreVerticalRegular, TextBulletListFilled, TextBulletListRegular } from "@fluentui/react-icons";
 import { memo } from "react";
 import { itemPath } from "../Database/Hooks";
 import type { Item } from "../Database/Types";
@@ -17,6 +17,8 @@ export const TilesIcon = bundleIcon(GridFilled, GridRegular);
 export const DetailsIcon = bundleIcon(TextBulletListFilled, TextBulletListRegular);
 export const DismissIcon = bundleIcon(DismissFilled, DismissRegular);
 export const GroupIcon = bundleIcon(GroupListFilled, GroupListRegular);
+export const BackIcon = bundleIcon(ChevronLeftFilled, ChevronLeftRegular);
+export const ChevronRightIcon = bundleIcon(ChevronRightFilled, ChevronRightRegular);
 
 // todo: figure out how to create correctly scaling svg icons, like the actual fluentui ones seem to do.
 const GalaxyRegular = createFluentIcon("GalaxyRegular", "514", [

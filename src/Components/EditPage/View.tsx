@@ -1,18 +1,12 @@
 import { GroupEditor } from "../GroupEditor";
 import { ItemEditor } from "../ItemEditor";
+import { Page } from "../Page";
 import type { EditPageState } from "./Types";
 
 export function useEditPageView(state: EditPageState) 
 {
-
-	switch(state.type) 
-	{
-		case "group":
-			return <GroupEditor groupId={state.id} />;
-		case "item":
-			return <ItemEditor itemId={state.id} />;
-	}
-
-	// default case, no specific editor found
-	return null;
+	return <Page type="scrollable">
+		{state.type === "group" && <GroupEditor groupId={state.id} />}
+		{state.type === "item" && <ItemEditor itemId={state.id} />}
+	</Page>
 }

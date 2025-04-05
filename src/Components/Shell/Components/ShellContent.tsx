@@ -19,10 +19,11 @@ const useShellContentStyles = makeStyles({
 		gridArea: "content",
 		backgroundColor: tokens.colorNeutralBackground4,
 		zIndex: 0,
+		overflow: "hidden",
 	},
 	shadow: {
 		gridArea: "content",
-		boxShadow: `0 0 2px rgba(0,0,0,0.12) inset, 0 4px 8px rgba(0,0,0,0.14) inset`,
+		boxShadow: "0 0 2px rgba(0,0,0,0.12) inset, 0 4px 8px rgba(0,0,0,0.14) inset",
 		pointerEvents: "none",
 		outline: "solid 1px red",
 		width: "100%",
