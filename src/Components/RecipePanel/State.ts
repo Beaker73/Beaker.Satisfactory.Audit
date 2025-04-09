@@ -7,7 +7,7 @@ import type { ByItemEntry, RecipePanelProps } from "./Types";
 
 export function useRecipePanelState(props: RecipePanelProps)
 {
-	const { onDismiss } = props;
+	const { onDismiss, type = "overlay" } = props;
 
 	const database = useDatabase();
 	const recipes = useMemo(() => Object.values(database.recipes)
@@ -35,7 +35,7 @@ export function useRecipePanelState(props: RecipePanelProps)
 						}
 					] as const)
 					.sort(([_keyA, itemA], [_keyB, itemB]) => itemA.item.name.localeCompare(itemB.item.name))
-			) ;
+			);
 
 			console.debug("byItem", {bareByItem, byItem});
 
@@ -67,7 +67,7 @@ export function useRecipePanelState(props: RecipePanelProps)
 		[]);
 
 	return {
-		onDismiss, onBack,
+		type, onDismiss, onBack,
 		view, subView,
 		recipes, byItem, byFactory,
 		onClickByItemEntry, selectedEntry,

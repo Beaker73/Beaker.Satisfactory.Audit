@@ -2,6 +2,7 @@ import { Card, List, ListItem, makeStyles, mergeClasses, Text, tokens, Toolbar, 
 import { GalaxyIcon32, WorldIcon } from "../../Helpers/Icons";
 import { Heading } from "../ElementTitle";
 import { HeadingTitle } from "../ElementTitle/HeadingTitle";
+import { Page } from "../Page";
 import { ToolbarCard, ToolbarCommands } from "../ToolbarCard";
 import type { WorldsPageState } from "./Types";
 
@@ -9,7 +10,7 @@ export function useWorldsPageView(state: WorldsPageState)
 {
 	const style = useWorldsPageStyles();
 
-	return <div className={style.root}>
+	return <Page className={style.root}>
 		<Heading icon={<GalaxyIcon32 />}>
 			<HeadingTitle>Known Worlds in your Galaxy</HeadingTitle>
 		</Heading>
@@ -42,7 +43,7 @@ export function useWorldsPageView(state: WorldsPageState)
 				</ListItem>;
 			})}
 		</List>
-	</div>;
+	</Page>;
 }
 
 const useWorldsPageStyles = makeStyles({

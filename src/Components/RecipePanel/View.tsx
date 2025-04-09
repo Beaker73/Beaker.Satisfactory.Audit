@@ -1,4 +1,4 @@
-import { Button, createPresenceComponent, DrawerBody, DrawerHeader, DrawerHeaderTitle, makeStyles, MenuDivider, MenuGroupHeader, MenuItem, mergeClasses, motionTokens, OverlayDrawer, SearchBox, ToggleButton, tokens, ToolbarButton, Tooltip } from "@fluentui/react-components";
+import { Button, createPresenceComponent, Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle, makeStyles, MenuDivider, MenuGroupHeader, MenuItem, mergeClasses, motionTokens, SearchBox, ToggleButton, tokens, ToolbarButton, Tooltip } from "@fluentui/react-components";
 import { buildingPath } from "../../Database/Hooks";
 import type { RecipeKey } from "../../Database/Types";
 import { BackIcon, DismissIcon, GroupIcon, ItemIcon } from "../../Helpers/Icons";
@@ -10,7 +10,7 @@ export function useRecipePanelView(state: RecipePanelState)
 {
 	const style = useRecipePanelStyles();
 
-	return <OverlayDrawer open position="end">
+	return <Drawer open type={state.type} position="end">
 		
 		<DrawerHeader>
 			<DrawerHeaderTitle action={
@@ -75,7 +75,7 @@ export function useRecipePanelView(state: RecipePanelState)
 			</DrawerBody>
 		</BodyPresenceMotion>
 
-	</OverlayDrawer>;
+	</Drawer>;
 }
 
 const useRecipePanelStyles = makeStyles({

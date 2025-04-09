@@ -8,7 +8,7 @@ export function usePageView(children: ReactNode, state: PageState)
 	const style = usePageStyles();
 
 	return <div className={mergeClasses(style.container, style[state.type])}>
-		<div className={style.content}>
+		<div className={mergeClasses(style.content, state.className)}>
 			{children}
 		</div>
 	</div>;
