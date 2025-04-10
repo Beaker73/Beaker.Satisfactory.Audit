@@ -2,7 +2,7 @@ import type { useStoryPageState } from "./State";
 
 export type StoryPageProps = {
 	/** Name of the Story to show */
-	name: string,
+	name?: string,
 };
 
 export type StoryPageState = ReturnType<typeof useStoryPageState>;

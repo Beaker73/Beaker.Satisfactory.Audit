@@ -17,7 +17,7 @@ export type Item = {
 	name: string,
 	description: string,
 	sinkPoints: number,
-	className: string,
+	className: ItemKey,
 	stackSize: number,
 	energyValue: number,
 	radioactiveDecay: number,
@@ -34,7 +34,7 @@ export type RecipeKey = keyof Data["recipes"];
 export type Recipe = {
 	slug: string,
 	name: string,
-	className: string,
+	className: RecipeKey,
 	alternate: boolean,
 	time: number,
 	inHand: boolean,
@@ -52,7 +52,7 @@ export type Recipe = {
 
 export type SchematicKey = keyof Data["schematics"];
 export type Schematic = {
-	className: string,
+	className: SchematicKey,
 	type: string,
 	name: string,
 	slug: string,
@@ -73,8 +73,8 @@ export type Schematic = {
 
 export type GeneratorKey = keyof Data["generators"];
 export type Generator = {
-	className: string,
-	fuel: string[],
+	className: GeneratorKey,
+	fuel: ItemKey[],
 	powerProduction: number,
 	powerProductionExponent: number,
 	waterToPowerRatio: number,
@@ -94,7 +94,7 @@ export type Resource = {
 
 export type MinerKey = keyof Data["miners"];
 export type Miner = {
-	className: string,
+	className: MinerKey,
 	allowedResources: ResourceKey[],
 	allowLiquids: boolean,
 	allowSolids: boolean,
@@ -108,7 +108,7 @@ export type Building = {
 	icon: string,
 	name: string,
 	description: string,
-	className: string,
+	className: BuildingKey,
 	categories: string[],
 	buildMenuPriority: number,
 	metadata: {

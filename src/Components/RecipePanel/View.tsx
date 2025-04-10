@@ -1,8 +1,8 @@
 import { Button, createPresenceComponent, Drawer, DrawerBody, DrawerHeader, DrawerHeaderTitle, makeStyles, MenuDivider, MenuGroupHeader, MenuItem, mergeClasses, motionTokens, SearchBox, ToggleButton, tokens, ToolbarButton, Tooltip } from "@fluentui/react-components";
+import { Fragment } from "react/jsx-runtime";
 import { buildingPath } from "../../Database/Hooks";
-import type { RecipeKey } from "../../Database/Types";
 import { BackIcon, DismissIcon, GroupIcon, ItemIcon } from "../../Helpers/Icons";
-import { RecipeFlow } from "../RecipeFlow";
+import { IngredientFlow } from "../IngredientFlow";
 import { RecipeName } from "../RecipeName";
 import type { RecipePanelState } from "./Types";
 
@@ -30,11 +30,11 @@ export function useRecipePanelView(state: RecipePanelState)
 					<div className={style.list}>
 						{state.view === "byItem" && Object.entries(state.byItem).map(([key, entry]) => 
 						{
-							const { item,recipies } = entry;
-							const isSubmenu = recipies.length > 1;
+							const { item } = entry;
+							const isSubmenu = entry.byMachine.count > 1;
 
 							return <MenuItem key={key} onClick={() => state.onClickByItemEntry(entry)} icon={<ItemIcon item={item} /> } hasSubmenu={isSubmenu}>
-								{item.name} {isSubmenu && <span className={style.batch}>{recipies.length}</span>}
+								{item.name} {isSubmenu && <span className={style.batch}>{entry.byMachine.count}</span>}
 							</MenuItem>;
 						})}
 					</div>
@@ -49,20 +49,22 @@ export function useRecipePanelView(state: RecipePanelState)
 			<DrawerBody>
 				<div className={style.root}>
 					<div className={mergeClasses(style.list, style.listSegments)}>
-						{state.view === "byItem" && state.selectedEntry && state.selectedEntry.byMachine.map(
-							(machine) => <div key={machine.building.slug}>
+						{state.view === "byItem" && state.selectedEntry && Object.values(state.selectedEntry.byMachine).filter(v => typeof v === "object").map(
+							(byMachine) => <div key={byMachine.building.className}>
 								<MenuGroupHeader className={style.groupHeader}>
-									<img src={buildingPath(machine.building)} alt={machine.building.name} width={32} height={32} />
-									{machine.building.name}
+									<img src={buildingPath(byMachine.building)} alt={byMachine.building.name} width={32} height={32} />
+									{byMachine.building.name}
 								</MenuGroupHeader>
 								<MenuDivider />
-								{machine.recipes.map((recipe) => <MenuItem key={recipe.slug}>
+								{byMachine.variants.map((variant) => <MenuItem key={variant.source.className}>
 									<div className={style.recipeItem}>
 										<div className={style.recipeName}>
-											<RecipeName recipe={recipe} noIcon noTag />
-											{recipe.alternate && <span className={style.recipeAlt}>Alternate</span> }
+											{variant.type === "recipe" && <Fragment>
+												<RecipeName recipe={variant.source} noIcon noTag />
+												{variant.source.alternate && <span className={style.recipeAlt}>Alternate</span> }
+											</Fragment>}
 										</div>
-										<RecipeFlow recipeKey={recipe.className as RecipeKey} size="medium" />
+										<IngredientFlow inputs={variant.input} outputs={variant.output} size="medium" />
 									</div>
 								</MenuItem>)}
 							</div>)}

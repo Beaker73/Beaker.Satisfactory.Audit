@@ -7,12 +7,12 @@ const stories = Object.fromEntries(Object.values(exports).map((story) => [story.
 export function useStoryPageState(props: StoryPageProps)
 {
 	const { name } = props;
-	const exportedStory: StoryExport | undefined = stories[name];
-
-	console.debug("stories", {stories, name, story: exportedStory});
+	const exportedStory: StoryExport | undefined = name ? stories[name] : undefined;
+	const allStories = Object.values(stories).map((story) => story.name);
 
 	return {
 		name,
 		exportedStory,
+		allStories,
 	};
 }

@@ -46,3 +46,7 @@ export const buildingPath = memoize((building: Building, size = 64) =>
 {
 	return `${import.meta.env.BASE_URL}/images/${building.icon}_${size}.png`;
 });
+
+
+
+

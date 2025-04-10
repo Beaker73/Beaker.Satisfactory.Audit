@@ -9,6 +9,7 @@ export function useAppRoutes()
 	return useRoutes({
 		"/": () => createElement(WorldsPage),
 		"/edit/:id": props => createElement(EditPage, props),
+		"/story": props => createElement(StoryPage, props),
 		"/story/:name": props => createElement(StoryPage, props),
 	}, {
 		basePath: "/Beaker.Satisfactory.Audit"
