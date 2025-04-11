@@ -1,4 +1,4 @@
-import type { Data } from "./Hooks";
+import type { Key } from "../Helpers/Types";
 
 export type Database = {
 	items: Record<ItemKey, Item>,
@@ -10,7 +10,7 @@ export type Database = {
 	buildings: Record<BuildingKey, Building>,
 }
 
-export type ItemKey = keyof Data["items"];
+export type ItemKey = Key<Item>;
 export type Item = {
 	slug: string,
 	icon: string,
@@ -30,7 +30,7 @@ export type Item = {
 	}
 }
 
-export type RecipeKey = keyof Data["recipes"];
+export type RecipeKey = Key<Recipe>;
 export type Recipe = {
 	slug: string,
 	name: string,
@@ -50,7 +50,7 @@ export type Recipe = {
 	maxPower: number,
 }
 
-export type SchematicKey = keyof Data["schematics"];
+export type SchematicKey = Key<Schematic>;
 export type Schematic = {
 	className: SchematicKey,
 	type: string,
@@ -71,7 +71,7 @@ export type Schematic = {
 	alternate: boolean,
 }
 
-export type GeneratorKey = keyof Data["generators"];
+export type GeneratorKey = Key<Generator>;
 export type Generator = {
 	className: GeneratorKey,
 	fuel: ItemKey[],
@@ -80,7 +80,7 @@ export type Generator = {
 	waterToPowerRatio: number,
 }
 
-export type ResourceKey = keyof Data["resources"];
+export type ResourceKey = Key<Resource>;
 export type Resource = {
 	item: ItemKey,
 	pingColor: {
@@ -92,7 +92,7 @@ export type Resource = {
 	speed: number,
 }
 
-export type MinerKey = keyof Data["miners"];
+export type MinerKey = Key<Miner>;
 export type Miner = {
 	className: MinerKey,
 	allowedResources: ResourceKey[],
@@ -102,7 +102,7 @@ export type Miner = {
 	extractCycleTime: number,
 }
 
-export type BuildingKey = keyof Data["buildings"];
+export type BuildingKey = Key<Building | Miner> ; // all miners use a subset of the building keys
 export type Building = {
 	slug: string,
 	icon: string,

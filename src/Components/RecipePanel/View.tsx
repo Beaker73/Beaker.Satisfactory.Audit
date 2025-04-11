@@ -2,6 +2,7 @@ import { Button, createPresenceComponent, Drawer, DrawerBody, DrawerHeader, Draw
 import { Fragment } from "react/jsx-runtime";
 import { buildingPath } from "../../Database/Hooks";
 import { BackIcon, DismissIcon, GroupIcon, ItemIcon } from "../../Helpers/Icons";
+import { objectEntries } from "../../Helpers/Object";
 import { IngredientFlow } from "../IngredientFlow";
 import { RecipeName } from "../RecipeName";
 import type { RecipePanelState } from "./Types";
@@ -28,7 +29,7 @@ export function useRecipePanelView(state: RecipePanelState)
 						</Tooltip>
 					</div>
 					<div className={style.list}>
-						{state.view === "byItem" && Object.entries(state.byItem).map(([key, entry]) => 
+						{state.view === "byItem" && objectEntries(state.byItem).map(([key, entry]) => 
 						{
 							const { item } = entry;
 							const isSubmenu = entry.byMachine.count > 1;

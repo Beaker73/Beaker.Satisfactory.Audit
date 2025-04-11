@@ -1,3 +1,4 @@
+import { objectEntries } from "../Helpers/Object";
 import { buildingSort } from "../Helpers/Sorting";
 import { getDatabase } from "./Hooks";
 import type { BuildingKey, ByItemEntry, ByMachineEntry, ItemKey, MinerVariantEntry, RecipeVariantEntry, RecipeVariantKey, VariantEntry, VariantKey } from "./Types";
@@ -9,8 +10,10 @@ export function useByItemDatabase()
 	return mergeBase.byItem;
 }
 
-export function getVariant(key: VariantKey): VariantEntry | undefined
+export function getVariant(key?: VariantKey): VariantEntry | undefined
 {
+	if(!key)
+		return undefined;
 	return mergeBase.variants[key] ?? undefined;
 }
 
@@ -32,7 +35,7 @@ export function merge()
 		return variant;
 	}
 
-	const byItem: Partial<Record<ItemKey, ByItemEntry>> = {};
+	const byItem: Record<ItemKey, ByItemEntry> = {};
 
 	// Object.values(database.generators)
 	// 	.forEach(generator => 
@@ -68,7 +71,7 @@ export function merge()
 				} satisfies ByItemEntry;
 				
 				entry.byMachine[miner.className] = entry.byMachine[miner.className] ?? {
-					building: database.buildings[miner.className],
+					building: database.buildings[miner.className], 
 					variants: [],
 					count: 0,
 				} satisfies ByMachineEntry;
@@ -128,10 +131,10 @@ export function merge()
 	// recreate with keys in desired order
 	// for items, we use alphabetical order
 	// for machines, we use a predefined desirable order
-	const sortedByItem: Partial<Record<ItemKey, ByItemEntry>> = {};
-	Object.entries(byItem)
-		.sort(([, valueA], [, valueB]) => valueA.item.name.localeCompare(valueB.item.name))
-		.forEach(([key, entry]) => sortedByItem[key as ItemKey] = {
+	const sortedByItem: Record<ItemKey, ByItemEntry> = {};
+	objectEntries(byItem)
+		.sort(([, valueA], [, valueB]) => valueA!.item.name.localeCompare(valueB!.item.name))
+		.forEach(([key, entry]) => sortedByItem[key] = {
 			...entry,
 			byMachine: Object.fromEntries(
 				Object.entries(entry.byMachine)

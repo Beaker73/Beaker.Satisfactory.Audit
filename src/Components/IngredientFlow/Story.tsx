@@ -1,5 +1,6 @@
 import { Card, makeStyles, tokens } from "@fluentui/react-components";
 import { IngredientFlow } from ".";
+import type { ItemKey } from "../../Database/Types";
 import type { StoryExport } from "../StoryPage/Types";
 import type { IngredientFlowProps } from "./Types";
 
@@ -9,11 +10,11 @@ function IngredientFlowStory()
 
 	const ingredientProps: IngredientFlowProps = {
 		inputs: [
-			{ quantity: 5, itemKey: "Desc_Coal_C" },
-			{ quantity: 1, itemKey: "BP_EquipmentDescriptorRifle_C" },
+			{ quantity: 5, itemKey: "Desc_Coal_C" as ItemKey },
+			{ quantity: 1, itemKey: "BP_EquipmentDescriptorRifle_C" as ItemKey },
 		],
 		outputs: [
-			{ quantity: 2, itemKey: "Desc_CrystalOscillator_C"}
+			{ quantity: 2, itemKey: "Desc_CrystalOscillator_C" as ItemKey}
 		],
 	};
 
