@@ -1,6 +1,6 @@
 import { Button, makeStyles, mergeClasses, tokens } from "@fluentui/react-components";
 import { Fragment } from "react/jsx-runtime";
-import { IngredientTile } from "../IngredientTile";
+import { IngredientFlow } from "../IngredientFlow";
 import { RecipeName } from "../RecipeName";
 import { RecipePanel } from "../RecipePanel";
 import type { VariantPickerState } from "./Types";
@@ -12,12 +12,17 @@ export function useVariantPickerView(state: VariantPickerState)
 	return <Fragment>
 		<Button appearance="transparent" onClick={state.onClick} className={mergeClasses(style.button, !state.variant ? style.unselected : undefined)}>
 			{state.variant?.type === "recipe" && <div className={style.variant}>
-				<div className={style.tile}><IngredientTile itemKey={state.variant.output[0].itemKey} size="medium" /></div>
+				{/* <div className={style.tile}><IngredientTile itemKey={state.variant.output[0].itemKey} size="medium" /></div> */}
+				<div className={style.tile}>
+					<IngredientFlow size="medium" building={state.variant.building.className} inputs={state.variant.input} outputs={state.variant.output} />
+				</div>
 				<div className={style.building}>{state.variant.building.name}</div>
 				<div className={style.recipe}><RecipeName recipe={state.variant.source} noIcon noTag /></div>
 			</div>}
 			{state.variant?.type === "miner" && <div className={style.variant}>
-				<div className={style.tile}><IngredientTile itemKey={state.variant.output[0].itemKey} size="medium" /></div>
+				<div className={style.tile}>
+					<IngredientFlow building={state.variant.building.className} inputs={state.variant.input} outputs={state.variant.output} size="medium" />
+				</div>
 				<div className={style.building}>{state.variant.building.name}</div>
 				<div className={style.recipe}>{state.variant.output[0].item.name}</div>
 			</div>}

@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import { getVariant } from "../../../Database/Merge";
 import type { Item } from "../../../State/Item";
 import { DataGridTemplate } from "../../DataGridTemplate";
-import { IngredientFlow } from "../../IngredientFlow";
 import { VariantPicker } from "../../VariantPicker";
 import type { DetailsViewState } from "./Types";
 
@@ -36,16 +35,6 @@ function useColumns(state: DetailsViewState)
 			renderHeaderCell: () => "Recipe",
 			renderCell: (item) => <VariantPicker value={getVariant(item.variant)} onVariantChange={(variant) => onVariantChange(item, variant)} />,
 			compare: (a, b) => a.type.localeCompare(b.type),
-		}),
-		createTableColumn<Item>({
-			columnId: "flow",
-			renderHeaderCell: () => "Flow",
-			renderCell: (item) => 
-			{
-				const variant = getVariant(item.variant);
-				if(!variant) return null;
-				return <IngredientFlow size="medium" inputs={variant.input} outputs={variant.output} />
-			},
 		}),
 	], [onVariantChange]);
 }

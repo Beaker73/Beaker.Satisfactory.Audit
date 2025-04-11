@@ -1,5 +1,6 @@
 import { makeStyles, mergeClasses } from "@fluentui/react-components";
-import { ChevronRightRegular } from "@fluentui/react-icons";
+import { ChevronRightRegular, DividerTallRegular } from "@fluentui/react-icons";
+import { Fragment } from "react/jsx-runtime";
 import { IngredientTile } from "../IngredientTile";
 import type { IngredientFlowState } from "./Types";
 
@@ -8,6 +9,10 @@ export function useIngredientFlowView(state: IngredientFlowState)
 	const style = useIngredientFlowStyles();
 
 	return <div className={mergeClasses(style.root, style[state.size])}>
+		{state.building && <Fragment>
+			<IngredientTile buildingKey={state.building} size={state.size} />
+			<DividerTallRegular />
+		</Fragment>}
 		{state.inputs.map(input =>
 			<IngredientTile key={input.itemKey} itemKey={input.itemKey} quantity={input.quantity} size={state.size} />
 		)}

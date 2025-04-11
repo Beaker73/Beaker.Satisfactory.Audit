@@ -1,5 +1,5 @@
 import { makeStyles, mergeClasses, tokens, Tooltip } from "@fluentui/react-components";
-import { itemPath } from "../../Database/Hooks";
+import { buildingPath, itemPath } from "../../Database/Hooks";
 import type { IngredientTileState } from "./Types";
 
 export function useIngredientTileView(state: IngredientTileState)
@@ -8,7 +8,7 @@ export function useIngredientTileView(state: IngredientTileState)
 
 	return <Tooltip content={state.tooltip} relationship="description" withArrow>
 		<div className={mergeClasses(style.root, style[state.size])}>
-			<img src={itemPath(state.item)} className={style.image} alt={state.item.name} />
+			<img src={itemPath(state.item) ?? buildingPath(state.building)} className={style.image} alt={state.item?.name ?? state.building?.name ?? "icon"} />
 			{state.showQuantity && <span className={mergeClasses(style.quantity, style[`${state.size}Quantity`] )}>{state.quantity}</span>}
 		</div>
 	</Tooltip>;
