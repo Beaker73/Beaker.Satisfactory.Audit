@@ -1,3 +1,4 @@
+import { buildingSort } from "../Helpers/Sorting";
 import { getDatabase } from "./Hooks";
 import type { Building, BuildingKey, Generator, Item, ItemKey, Miner, Recipe } from "./Types";
 
@@ -103,7 +104,23 @@ export function merge()
 			});
 		});
 
-	return byItem;
+	// recreate with keys in desired order
+	// for items, we use alphabetical order
+	// for machines, we use a predefined desirable order
+	const sortedByItem: Partial<Record<ItemKey, ByItemEntry>> = {};
+	Object.entries(byItem)
+		.sort(([, valueA], [, valueB]) => valueA.item.name.localeCompare(valueB.item.name))
+		.forEach(([key, entry]) => sortedByItem[key as ItemKey] = {
+			...entry,
+			byMachine: Object.fromEntries(
+				Object.entries(entry.byMachine)
+					.sort(([keyA], [keyB]) => buildingSort(keyA as BuildingKey, keyB as BuildingKey)
+					)) as Partial<Record<BuildingKey, ByMachineEntry>> & { count: number },
+		});
+		
+
+
+	return sortedByItem;
 }
 
 export type ByItemEntry = {
