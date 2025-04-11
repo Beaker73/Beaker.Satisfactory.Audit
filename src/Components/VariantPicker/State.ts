@@ -1,12 +1,11 @@
 import { useCallback, useState } from "react";
-import { useRecipeByKey } from "../../Database/Hooks";
-import type { RecipePickerProps } from "./Types";
+import type { VariantPickerProps } from "./Types";
 
-export function useRecipePickerState(props: RecipePickerProps)
+export function useVariantPickerState(props: VariantPickerProps)
 {
-	const { value } = props;
+	const { value, onVariantChange } = props;
 
-	const recipe = useRecipeByKey(value);
+	//const recipe = useRecipeByKey(value);
 	const [isOpen, setIsOpen] = useState(false);
 
 	const onClick = useCallback(
@@ -23,7 +22,7 @@ export function useRecipePickerState(props: RecipePickerProps)
 		[]);
 
 	return {
-		recipe,
+		variant: value, onVariantChange,
 		onClick, isOpen, onDismiss,
 	};
 }

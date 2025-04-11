@@ -1,12 +1,17 @@
 import { buildingSort } from "../Helpers/Sorting";
 import { getDatabase } from "./Hooks";
-import type { Building, BuildingKey, Generator, Item, ItemKey, Miner, Recipe } from "./Types";
+import type { BuildingKey, ByItemEntry, ByMachineEntry, ItemKey, MinerVariantEntry, RecipeVariantEntry, RecipeVariantKey, VariantEntry, VariantKey } from "./Types";
 
-const byItem = merge();
+const mergeBase = merge();
 
 export function useByItemDatabase() 
 {
-	return byItem;
+	return mergeBase.byItem;
+}
+
+export function getVariant(key: VariantKey): VariantEntry | undefined
+{
+	return mergeBase.variants[key] ?? undefined;
 }
 
 
@@ -14,6 +19,18 @@ export function useByItemDatabase()
 export function merge() 
 {
 	const database = getDatabase();
+
+	const variants: Partial<Record<VariantKey, VariantEntry>> = {};
+	const registerVariant = <T extends VariantEntry>(variant: T): T => 
+	{
+		// if(variant.key in variants) 
+		// {
+		// 	console.log("Variant already exists", {new: variant, old: variants[variant.key]});
+		// 	throw new Error(`Variant ${variant.key} already exists`);
+		// }
+		variants[variant.key] = variant;
+		return variant;
+	}
 
 	const byItem: Partial<Record<ItemKey, ByItemEntry>> = {};
 
@@ -58,12 +75,14 @@ export function merge()
 
 				entry.byMachine[miner.className]!.variants = [
 					...entry.byMachine[miner.className]!.variants, 
-					{
+					registerVariant({
+						key: `miner:${miner.className}:${resourceKey}`,
 						type: "miner",
+						building: database.buildings[miner.className],
 						source: miner,
 						input: [],
 						output: [{quantity: miner.itemsPerCycle, itemKey: resource.item, item: database.items[resource.item]}],
-					} satisfies VariantEntry
+					} satisfies MinerVariantEntry)
 				];
 				
 				entry.byMachine.count++;
@@ -91,12 +110,14 @@ export function merge()
 						variants: [],
 						count: 0,
 					} satisfies ByMachineEntry;
-					byMachine.variants = [...byMachine.variants, {
+					byMachine.variants = [...byMachine.variants, registerVariant({
+						key: `recipe:${recipe.className}:${building}` as RecipeVariantKey,
 						type: "recipe",
+						building: database.buildings[building],
 						source: recipe,
 						input: recipe.ingredients.map(i => ({ quantity: i.amount, itemKey: i.item, item: database.items[i.item] })),
 						output: recipe.products.map(i => ({ quantity: i.amount, itemKey: i.item, item: database.items[i.item] })),	
-					} satisfies VariantEntry];
+					} satisfies RecipeVariantEntry)];
 					
 					entry.byMachine.count++;
 					entry.byMachine[building].count = entry.byMachine.count;
@@ -120,42 +141,8 @@ export function merge()
 		
 
 
-	return sortedByItem;
-}
-
-export type ByItemEntry = {
-	itemKey: ItemKey,
-	item: Item,
-	byMachine: Partial<Record<BuildingKey, ByMachineEntry>> & { count: number },
-}
-export type ByMachineEntry = {
-	building: Building,
-	variants: VariantEntry[],
-	count: number,
-}
-
-export type RecipeVariantEntry = {
-	type: "recipe",
-	source: Recipe,
-	input: ItemQuantity[],
-	output: ItemQuantity[],
-}
-export type MinerVariantEntry = {
-	type: "miner",
-	source: Miner,
-	input: ItemQuantity[],
-	output: ItemQuantity[],
-}
-export type GeneratorVariantEntry = {
-	type: "generator",
-	source: Generator,
-	input: ItemQuantity[],
-	output: ItemQuantity[],
-}
-export type VariantEntry = RecipeVariantEntry | MinerVariantEntry | GeneratorVariantEntry;
-
-export type ItemQuantity = {
-	item: Item,
-	itemKey: ItemKey,
-	quantity: number,
+	return {
+		byItem: sortedByItem,
+		variants: variants,
+	};
 }

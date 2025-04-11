@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
 import { useDatabase } from "../../Database/Hooks";
-import type { ByItemEntry } from "../../Database/Merge";
 import { useByItemDatabase } from "../../Database/Merge";
+import type { BuildingKey, ByItemEntry, VariantEntry } from "../../Database/Types";
 import type { RecipePanelProps } from "./Types";
 
 export function useRecipePanelState(props: RecipePanelProps)
 {
-	const { onDismiss, type = "overlay" } = props;
+	const { onDismiss, onVariantSelected, type = "overlay" } = props;
 
 	const database = useDatabase();
 	const byItem = useByItemDatabase();
@@ -23,11 +23,33 @@ export function useRecipePanelState(props: RecipePanelProps)
 	const onClickByItemEntry = useCallback(
 		(entry: ByItemEntry) => 
 		{
-			setSelectedEntry(entry);
-			if(entry.byMachine.count > 1)
+			if(entry.byMachine.count > 1) 
+			{
+				setSelectedEntry(entry);
 				setSubView("recipes");
+			}
+			else 
+			{
+				const onlyBuilding = entry.byMachine[Object.keys(entry.byMachine).find(k => k !== "count") as BuildingKey];
+				if(onlyBuilding) 
+				{
+					const onlyVariant = onlyBuilding.variants[0];
+					if(onlyVariant) 
+					{
+						onVariantSelected?.(onlyVariant);
+						onDismiss?.();
+					}
+				}
+			}
 		},
-		[]);
+		[onDismiss, onVariantSelected]);
+	const onClickByVariantEntry = useCallback(
+		(variant: VariantEntry) => 
+		{
+			onVariantSelected?.(variant);
+			onDismiss?.();
+		},
+		[onDismiss, onVariantSelected]);
 
 	const onBack = useCallback(
 		() => 
@@ -41,7 +63,7 @@ export function useRecipePanelState(props: RecipePanelProps)
 		type, onDismiss, onBack,
 		view, subView,
 		recipes, byItem,
-		onClickByItemEntry, selectedEntry,
+		onClickByItemEntry, onClickByVariantEntry, selectedEntry,
 		
 	};
 }

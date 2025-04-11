@@ -122,3 +122,56 @@ export type Building = {
 		length: number,
 	}
 }
+
+
+
+
+
+
+export type ByItemEntry = {
+	itemKey: ItemKey,
+	item: Item,
+	byMachine: Partial<Record<BuildingKey, ByMachineEntry>> & { count: number },
+}
+export type ByMachineEntry = {
+	building: Building,
+	variants: VariantEntry[],
+	count: number,
+}
+
+export type RecipeVariantEntry = {
+	key: RecipeVariantKey,
+	type: "recipe",
+	building: Building,
+	source: Recipe,
+	input: ItemQuantity[],
+	output: ItemQuantity[],
+}
+export type MinerVariantEntry = {
+	key: MinerVariantKey,
+	type: "miner",
+	building: Building,
+	source: Miner,
+	input: ItemQuantity[],
+	output: ItemQuantity[],
+}
+export type GeneratorVariantEntry = {
+	key: GeneratorVariantKey,
+	type: "generator",
+	building: Building,
+	source: Generator,
+	input: ItemQuantity[],
+	output: ItemQuantity[],
+}
+export type VariantEntry = RecipeVariantEntry | MinerVariantEntry | GeneratorVariantEntry;
+
+export type MinerVariantKey = `miner:${MinerKey}:${ResourceKey}`;
+export type GeneratorVariantKey = `generator:${GeneratorKey}`;
+export type RecipeVariantKey = `recipe:${RecipeKey}:${BuildingKey}`;
+export type VariantKey = MinerVariantKey | GeneratorVariantKey | RecipeVariantKey;
+
+export type ItemQuantity = {
+	item: Item,
+	itemKey: ItemKey,
+	quantity: number,
+}

@@ -1,11 +1,11 @@
-import type { RecipeKey } from "../Database/Types";
+import type { VariantKey } from "../Database/Types";
 
 export type Building = {
 	type: "item",
 	subType: "building",
 	id: string,
 	name: string,
-	recipeKey?: RecipeKey,
+	variant?: VariantKey,
 	quantity: number,
 	multiplier: number,
 	somersloops: number,	

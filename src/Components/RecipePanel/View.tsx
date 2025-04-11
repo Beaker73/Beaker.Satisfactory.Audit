@@ -56,7 +56,7 @@ export function useRecipePanelView(state: RecipePanelState)
 									{byMachine.building.name}
 								</MenuGroupHeader>
 								<MenuDivider />
-								{byMachine.variants.map((variant) => <MenuItem key={variant.source.className}>
+								{byMachine.variants.map((variant) => <MenuItem key={variant.source.className} onClick={() => state.onClickByVariantEntry(variant)} icon={<ItemIcon item={variant.output[0].item} />} hasSubmenu={variant.input.length > 1}>
 									<div className={style.recipeItem}>
 										<div className={style.recipeName}>
 											{variant.type === "recipe" && <Fragment>

@@ -1,8 +1,10 @@
 import { createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
 import { useMemo } from "react";
+import { getVariant } from "../../../Database/Merge";
 import type { Item } from "../../../State/Item";
 import { DataGridTemplate } from "../../DataGridTemplate";
-import { RecipePicker } from "../../RecipyPicker";
+import { IngredientFlow } from "../../IngredientFlow";
+import { VariantPicker } from "../../VariantPicker";
 import type { DetailsViewState } from "./Types";
 
 export function useDetailsViewView(state: DetailsViewState)
@@ -20,6 +22,8 @@ const useDetailsViewStyles = makeStyles({
 
 function useColumns(state: DetailsViewState)
 {
+	const { onVariantChange } = state;
+
 	return useMemo(() => [
 		createTableColumn<Item>({
 			columnId: "name",
@@ -29,9 +33,19 @@ function useColumns(state: DetailsViewState)
 		}),
 		createTableColumn<Item>({
 			columnId: "recipy",
-			renderHeaderCell: () => "Recipy",
-			renderCell: (item) => <RecipePicker value={item.recipeKey} onRecipeChange={state.onRecipeChange} />,
+			renderHeaderCell: () => "Recipe",
+			renderCell: (item) => <VariantPicker value={getVariant(item.variant)} onVariantChange={(variant) => onVariantChange(item, variant)} />,
 			compare: (a, b) => a.type.localeCompare(b.type),
 		}),
-	], [state.onRecipeChange]);
+		createTableColumn<Item>({
+			columnId: "flow",
+			renderHeaderCell: () => "Flow",
+			renderCell: (item) => 
+			{
+				const variant = getVariant(item.variant);
+				if(!variant) return null;
+				return <IngredientFlow size="medium" inputs={variant.input} outputs={variant.output} />
+			},
+		}),
+	], [onVariantChange]);
 }

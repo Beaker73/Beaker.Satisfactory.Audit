@@ -2,6 +2,7 @@ import { v4 } from "uuid";
 import { createStore } from "zustand";
 import { createJSONStorage, persist, subscribeWithSelector } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+import type { VariantKey } from "../../Database/Types";
 import type { Element } from "../Element";
 import type { Group, GroupSubType, GroupView } from "../Group";
 import type { Item, ItemSubType } from "../Item";
@@ -19,6 +20,7 @@ export type WorldStore = WorldState & {
 	changeView: (groupId: string, view: GroupView) => void;
 	createGroup: (parentGroupId: string, subType: GroupSubType) => string,
 	createItem: (parentGroupId: string, subType: ItemSubType) => string,
+	updateVariant: (itemId: string, variant: VariantKey | undefined) => void,
 }
 
 const worldStoresById: Record<string, ReturnType<typeof creatWorldStore>> = {};
@@ -129,6 +131,17 @@ function creatWorldStore(worldId: string)
 								}
 							});
 							return itemId;
+						},
+
+						updateVariant: (itemId: string, variant: VariantKey | undefined) =>
+						{
+							set(state => 
+							{
+								console.debug(`Updating variant for ${itemId} to ${variant}`);
+								const item = findElementById(state, itemId) as Item | undefined;
+								if(item) 
+									item.variant = variant;
+							});
 						}
 					})),
 				{
