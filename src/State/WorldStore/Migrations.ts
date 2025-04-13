@@ -1,6 +1,6 @@
 import type { WorldState } from ".";
 
-export const CURRENT_VERSION = 1;
+export const CURRENT_VERSION = 2;
 
 /**
  * Migrates any old state al the way up to the latest version.
@@ -24,10 +24,25 @@ export function migrate(state: unknown, version: number): WorldState
 }
 
 const migrateFrom = [
-	0, migrateFrom0,
+	migrateFrom0,
+	migrateFrom1,
 ] as const;
 
 function migrateFrom0(_state: unknown): WorldState
 {
 	throw new Error("There is no version 0. This is here to keep base code compiling while there are no migrations yet.");
+}
+
+function migrateFrom1(state: unknown): WorldState
+{
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const { elements, ...oldState } = state as any;
+	
+	// elements was renamed to nodes in v2
+	const newState: WorldState = {
+		...oldState,
+		nodes: elements,
+	};
+
+	return newState;
 }

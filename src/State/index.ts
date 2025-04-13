@@ -1,4 +1,5 @@
 import { useStore } from "zustand";
+import type { WorldId } from "./Group";
 import { useProjectStore } from "./ProjectStore";
 import type { WorldStore } from "./WorldStore";
 import { getOrCreateWorldStore } from "./WorldStore";
@@ -21,7 +22,7 @@ let unsubscribe: undefined | (() => void);
 // special case for the world name, which is also stored in the project store
 // subscribe to the active world store, and when the name changes, update the project stores name aswell
 useProjectStore.subscribe(store => store.activeProjectId, onActiveProjectIdChange);
-function onActiveProjectIdChange(activeProjectId: string)
+function onActiveProjectIdChange(activeProjectId: WorldId)
 { 
 	// when active project changes, unsubscribe from the previous world store
 	unsubscribe?.();
@@ -30,7 +31,7 @@ function onActiveProjectIdChange(activeProjectId: string)
 	console.debug("Subscribing to world store", activeProjectId);
 	unsubscribe = getOrCreateWorldStore(activeProjectId).subscribe(
 		// when world name changes
-		store => store.elements[store.rootId]?.name,
+		store => store.nodes[store.rootId]?.name,
 		// store that new name in the project store for the matching project
 		name => 
 		{

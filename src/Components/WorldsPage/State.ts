@@ -2,6 +2,7 @@ import { useNavigate } from "raviger";
 import { useCallback, useMemo } from "react";
 import { useShallow } from "zustand/shallow";
 import { useProjectStore } from "../../State";
+import type { WorldId } from "../../State/Group";
 import type { WorldsPageProps } from "./Types";
 
 export function useWorldsPageState(_props: WorldsPageProps)
@@ -11,7 +12,7 @@ export function useWorldsPageState(_props: WorldsPageProps)
 	const navigate = useNavigate();
 	
 	const setActiveProjectId = useProjectStore(store => store.setActiveProjectId);
-	const onActivateProject = useCallback((projectId: string) => 
+	const onActivateProject = useCallback((projectId: WorldId) => 
 	{
 		setActiveProjectId(projectId);
 		navigate(`/edit/${projectId}`);

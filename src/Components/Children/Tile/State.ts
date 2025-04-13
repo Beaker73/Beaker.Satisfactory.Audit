@@ -1,13 +1,13 @@
 import { useNavigate } from "raviger";
 import { useCallback } from "react";
 import { useWorldStore } from "../../../State";
-import { findElementById } from "../../../State/Visitor";
+import { findNodeById } from "../../../State/Visitor";
 import type { TileProps } from "./Types";
 
 export function useTileState(props: TileProps)
 {
-	const { elementId } = props;
-	const element = useWorldStore(state => findElementById(state, elementId));
+	const { nodeId: elementId } = props;
+	const element = useWorldStore(state => findNodeById(state, elementId));
 
 	const navigate = useNavigate();
 	const onEdit = useCallback(() => 

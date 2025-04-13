@@ -1,7 +1,8 @@
+import type { NodeId } from "../../../State/Node";
 import type { useTileState } from "./State";
 
 export type TileProps = {
-	elementId: string,
+	nodeId: NodeId,
 };
 
 export type TileState = ReturnType<typeof useTileState>;

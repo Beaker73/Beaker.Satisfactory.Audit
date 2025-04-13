@@ -3,29 +3,29 @@ import { createStore } from "zustand";
 import { createJSONStorage, persist, subscribeWithSelector } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import type { VariantKey } from "../../Database/Types";
-import type { Element } from "../Element";
-import type { Group, GroupSubType, GroupView } from "../Group";
-import type { Item, ItemSubType } from "../Item";
-import { findElementById, findGroupById } from "../Visitor";
-import { migrate } from "./Migrations";
+import type { Group, GroupId, GroupSubType, GroupView, World, WorldId } from "../Group";
+import type { BuildingId, Item, ItemId, ItemSubType } from "../Item";
+import type { Node, NodeId } from "../Node";
+import { findGroupById, findItemById, findNodeById } from "../Visitor";
+import { CURRENT_VERSION, migrate } from "./Migrations";
 
 export type WorldState = {
-	rootId: string;
-	elements: Record<string, Element>;
+	rootId: WorldId;
+	nodes: Record<string, Node>;
 }
 
 export type WorldStore = WorldState & {
-	addElement: (parentGroupId: string, element: Element) => void;
-	updateName: (elementId: string, name: string) => void;
-	changeView: (groupId: string, view: GroupView) => void;
-	createGroup: (parentGroupId: string, subType: GroupSubType) => string,
-	createItem: (parentGroupId: string, subType: ItemSubType) => string,
-	updateVariant: (itemId: string, variant: VariantKey | undefined) => void,
+	addElement: (parentGroupId: GroupId, element: Node) => void;
+	updateName: (nodeId: NodeId, name: string) => void;
+	changeView: (groupId: GroupId, view: GroupView) => void;
+	createGroup: (parentGroupId: Exclude<GroupId, WorldId>, subType: Exclude<GroupSubType, "world">) => string,
+	createItem: (parentGroupId: GroupId, subType: ItemSubType) => string,
+	updateVariant: (itemId: ItemId, variant: VariantKey | undefined) => void,
 }
 
-const worldStoresById: Record<string, ReturnType<typeof creatWorldStore>> = {};
+const worldStoresById: Record<WorldId, ReturnType<typeof creatWorldStore>> = {};
 
-export function getOrCreateWorldStore(worldId: string) 
+export function getOrCreateWorldStore(worldId: WorldId) 
 {
 	let worldStore = worldStoresById[worldId];
 
@@ -40,7 +40,7 @@ export function getOrCreateWorldStore(worldId: string)
 	return worldStore;
 }
 
-function creatWorldStore(worldId: string) 
+function creatWorldStore(worldId: WorldId) 
 {
 	return createStore<WorldStore>()(
 		subscribeWithSelector(
@@ -48,7 +48,7 @@ function creatWorldStore(worldId: string)
 				immer(
 					(set) => ({
 						rootId: worldId,
-						elements: {
+						nodes: {
 							[worldId]: {
 								type: "group",
 								subType: "world",
@@ -59,26 +59,26 @@ function creatWorldStore(worldId: string)
 							},
 						},
 
-						addElement: (parentGroupId: string, element: Element) =>
+						addElement: (parentGroupId: GroupId, node: Node) =>
 							set(state => 
 							{
 								const gr = findGroupById(state, parentGroupId);
 								if(gr) 
 								{
-									gr.children.push(element.id);
-									state.elements[element.id] = element;
+									gr.children.push(node.id);
+									state.nodes[node.id] = node;
 								}
 							}),
 
-						updateName: (elementId: string, name: string) =>
+						updateName: (nodeId: NodeId, name: string) =>
 							set(state =>
 							{
-								const el = findElementById(state, elementId);
+								const el = findNodeById(state, nodeId);
 								if(el)
 									el.name = name;
 							}),
 
-						changeView: (groupId: string, view: GroupView) =>
+						changeView: (groupId: GroupId, view: GroupView) =>
 							set(state =>
 							{
 								const el = findGroupById(state, groupId);
@@ -86,32 +86,33 @@ function creatWorldStore(worldId: string)
 									el.view = view;
 							}),
 
-						createGroup: (parentGroupId: string, subType: GroupSubType) => 
+						createGroup: (parentGroupId: Exclude<GroupId, WorldId>, subType: Exclude<GroupSubType, "world">) => 
 						{
-							const factoryId = v4();
+							const groupId = v4() as  Exclude<GroupId, WorldId>;
 							set(state => 
 							{
 								const parentGroup = findGroupById(state, parentGroupId);
 								if(parentGroup) 
 								{
-									const factory = {
+									const group = {
 										type: "group",
 										subType,
-										id: factoryId,
-										name: "Factory",
+										id: groupId,
+										name: subType === "factory" ? "Unnamed Factory" : subType === "folder" ? "Unnamed Folder" : "Unnamed Group",
 										children: [],
 										view: "tiles",
-									} satisfies Group;
-									parentGroup.children.push(factoryId);
-									state.elements[factoryId] = factory;
+									} as Exclude<Group, World>;
+
+									parentGroup.children.push(groupId);
+									state.nodes[groupId] = group;
 								}
 							});
-							return factoryId;
+							return groupId;
 						},
 
-						createItem: (parentGroupId: string, subType: ItemSubType) => 
+						createItem: <TSubType extends ItemSubType>(parentGroupId: GroupId, subType: TSubType) => 
 						{
-							const itemId = v4();
+							const itemId = v4() as TSubType extends "building" ? BuildingId : ItemId;
 							set(state => 
 							{
 								const parentGroup = findGroupById(state, parentGroupId);
@@ -127,18 +128,18 @@ function creatWorldStore(worldId: string)
 										somersloops: 0,
 									} satisfies Item;
 									parentGroup.children.push(itemId);
-									state.elements[itemId] = item;
+									state.nodes[itemId] = item;
 								}
 							});
 							return itemId;
 						},
 
-						updateVariant: (itemId: string, variant: VariantKey | undefined) =>
+						updateVariant: (itemId: ItemId, variant: VariantKey | undefined) =>
 						{
 							set(state => 
 							{
 								console.debug(`Updating variant for ${itemId} to ${variant}`);
-								const item = findElementById(state, itemId) as Item | undefined;
+								const item = findItemById(state, itemId);
 								if(item) 
 									item.variant = variant;
 							});
@@ -146,7 +147,7 @@ function creatWorldStore(worldId: string)
 					})),
 				{
 					name: `satisfactory-audit-world-${worldId}`,
-					version: 1,
+					version: CURRENT_VERSION,
 					storage: createJSONStorage(() => localStorage),
 					migrate
 				}

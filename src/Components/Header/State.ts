@@ -10,7 +10,7 @@ export function useHeaderState(_props: HeaderProps)
 	const updateName = useWorldStore(store => store.updateName);
 	const { worldId, worldName } = useWorldStore(useShallow(state => ({ 
 		worldId: state.rootId, 
-		worldName: state.elements[state.rootId]?.name ?? "",
+		worldName: state.nodes[state.rootId]?.name ?? "",
 	})));
 	const updateWorldName = useCallback<NonNullable<InputProps["onChange"]>>(
 		(_, data) => updateName(worldId, data.value ?? ""), 

@@ -2,20 +2,21 @@ import { v4 } from "uuid";
 import { create } from "zustand";
 import { createJSONStorage, persist, subscribeWithSelector } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
+import type { WorldId } from "../Group";
 import type { Project } from "../Project";
 import { migrate } from "./Migrations";
 
 export type ProjectState = {
-	activeProjectId: string;
-	projects: Record<string, Project>;
+	activeProjectId: WorldId;
+	projects: Record<WorldId, Project>;
 }
 
 export type ProjectStore = ProjectState & {
-	setActiveProjectId: (projectId: string) => void;
-	createNewProject: () => string;
+	setActiveProjectId: (projectId: WorldId) => void;
+	createNewProject: () => WorldId;
 }
 
-const initialProjectId = "1fe812dc-5508-477a-9d3d-1337cf7c3235";
+const initialProjectId = "1fe812dc-5508-477a-9d3d-1337cf7c3235" as WorldId;
 
 export const useProjectStore = create<ProjectStore>()(
 	subscribeWithSelector(
@@ -33,7 +34,7 @@ export const useProjectStore = create<ProjectStore>()(
 						},
 					},
 
-					setActiveProjectId: (projectId: string) => 
+					setActiveProjectId: (projectId: WorldId) => 
 					{
 						if(projectId in get().projects)
 						{
@@ -47,11 +48,11 @@ export const useProjectStore = create<ProjectStore>()(
 
 					createNewProject: () => 
 					{
-						let id = "";
+						let id = "" as WorldId;
 
 						set(state => 
 						{
-							id = v4();
+							id = v4() as WorldId;
 							state.projects[id] = {
 								type: "project",
 								id: id,

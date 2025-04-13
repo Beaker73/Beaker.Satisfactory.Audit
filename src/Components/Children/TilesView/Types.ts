@@ -1,8 +1,8 @@
+import type { Node } from "../../../State/Node";
 import type { useTilesViewState } from "./State";
-import type { Element } from "../../../State/Element"
 
 export type TilesViewProps = {
-	children: Element[],
+	children: Node[],
 };
 
 export type TilesViewState = ReturnType<typeof useTilesViewState>;

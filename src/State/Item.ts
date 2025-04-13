@@ -1,9 +1,11 @@
 import type { VariantKey } from "../Database/Types";
+import type { Key } from "../Helpers/Types";
 
+export type BuildingId = Key<Building>;
 export type Building = {
 	type: "item",
 	subType: "building",
-	id: string,
+	id: BuildingId,
 	name: string,
 	variant?: VariantKey,
 	quantity: number,
@@ -11,6 +13,7 @@ export type Building = {
 	somersloops: number,	
 }
 
+export type ItemId = BuildingId;
 export type Item =
 	| Building;
 

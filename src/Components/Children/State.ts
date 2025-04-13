@@ -3,7 +3,8 @@ import { useCallback } from "react";
 import { useShallow } from "zustand/shallow";
 import { hasValue } from "../../Helpers/Object";
 import { useWorldStore } from "../../State";
-import { findElementById, findGroupById } from "../../State/Visitor";
+import type { FactoryId, FolderId } from "../../State/Group";
+import { findGroupById, findNodeById } from "../../State/Visitor";
 import type { ChildrenProps } from "./Types";
 
 export function useChildrenState(props: ChildrenProps)
@@ -12,7 +13,7 @@ export function useChildrenState(props: ChildrenProps)
 
 	const group = useWorldStore(state => findGroupById(state, groupId));
 	const children = useWorldStore(useShallow(state => 
-		group?.children.map(childId => findElementById(state, childId)).filter(hasValue) ?? []
+		group?.children.map(childId => findNodeById(state, childId)).filter(hasValue) ?? []
 	));
 
 
@@ -26,7 +27,7 @@ export function useChildrenState(props: ChildrenProps)
 	{ 
 		if(group) 
 		{
-			const factoryId = createGroup(group.id, "factory");
+			const factoryId = createGroup(group.id as FactoryId, "factory");
 			navigate(`/edit/${factoryId}`);
 		}
 	}, [createGroup, group, navigate]);
@@ -36,7 +37,7 @@ export function useChildrenState(props: ChildrenProps)
 	{ 
 		if(group) 
 		{
-			const factoryId = createGroup(group.id, "folder");
+			const factoryId = createGroup(group.id as FolderId, "folder");
 			navigate(`/edit/${factoryId}`);
 		}
 	}, [createGroup, group, navigate]);
