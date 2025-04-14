@@ -4,7 +4,7 @@ import { createJSONStorage, persist, subscribeWithSelector } from "zustand/middl
 import { immer } from "zustand/middleware/immer";
 import type { VariantKey } from "../../Database/Types";
 import type { Group, GroupId, GroupSubType, GroupView, World, WorldId } from "../Group";
-import type { BuildingId, Item, ItemId, ItemSubType } from "../Item";
+import type { BuildId, Item, ItemId, ItemSubType } from "../Item";
 import type { Node, NodeId } from "../Node";
 import { findGroupById, findItemById, findNodeById } from "../Visitor";
 import { CURRENT_VERSION, migrate } from "./Migrations";
@@ -112,7 +112,7 @@ function creatWorldStore(worldId: WorldId)
 
 						createItem: <TSubType extends ItemSubType>(parentGroupId: GroupId, subType: TSubType) => 
 						{
-							const itemId = v4() as TSubType extends "building" ? BuildingId : ItemId;
+							const itemId = v4() as TSubType extends "building" ? BuildId : ItemId;
 							set(state => 
 							{
 								const parentGroup = findGroupById(state, parentGroupId);
@@ -123,9 +123,7 @@ function creatWorldStore(worldId: WorldId)
 										subType,
 										id: itemId,
 										name: "Factory",
-										multiplier: 1,
-										quantity: 1,
-										somersloops: 0,
+										instances: [],
 									} satisfies Item;
 									parentGroup.children.push(itemId);
 									state.nodes[itemId] = item;

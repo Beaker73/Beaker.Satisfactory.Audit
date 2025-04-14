@@ -1,6 +1,6 @@
 import type { WorldState } from ".";
 
-export const CURRENT_VERSION = 2;
+export const CURRENT_VERSION = 3;
 
 /**
  * Migrates any old state al the way up to the latest version.
@@ -26,6 +26,7 @@ export function migrate(state: unknown, version: number): WorldState
 const migrateFrom = [
 	migrateFrom0,
 	migrateFrom1,
+	migrateFrom2,
 ] as const;
 
 function migrateFrom0(_state: unknown): WorldState
@@ -42,6 +43,31 @@ function migrateFrom1(state: unknown): WorldState
 	const newState: WorldState = {
 		...oldState,
 		nodes: elements,
+	};
+
+	return newState;
+}
+
+function migrateFrom2(state: unknown): WorldState
+{
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const { nodes, ...oldState } = state as any;
+
+	// nodes was renamed to items in v3
+	const newState: WorldState = {
+		...oldState,
+		nodes: {
+			...nodes,
+			...Object.fromEntries(
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
+				Object.entries<any>(nodes)
+					.filter(([, node]) => node.type === "item")
+					.map(([key, node]) => [key, {
+						...node,
+						instances: [],
+					}] as const)
+			),
+		}
 	};
 
 	return newState;

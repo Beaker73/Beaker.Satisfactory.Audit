@@ -1,20 +1,25 @@
 import type { VariantKey } from "../Database/Types";
 import type { Key } from "../Helpers/Types";
 
-export type BuildingId = Key<Building>;
-export type Building = {
+export type BuildId = Key<Build>;
+export type Build = {
 	type: "item",
 	subType: "building",
-	id: BuildingId,
+	id: BuildId,
 	name: string,
 	variant?: VariantKey,
-	quantity: number,
-	multiplier: number,
-	somersloops: number,	
+	instances: Instance[],
 }
 
-export type ItemId = BuildingId;
+export type InstanceId = Key<Instance>;
+export type Instance = {
+	id: InstanceId,
+	speed: number,
+	somersloops: number,
+}
+
+export type ItemId = BuildId;
 export type Item =
-	| Building;
+	| Build;
 
 export type ItemSubType = Item["subType"];

@@ -31,10 +31,16 @@ function useColumns(state: DetailsViewState)
 			compare: (a, b) => a.name.localeCompare(b.name),
 		}),
 		createTableColumn<Item>({
-			columnId: "recipy",
+			columnId: "recipe",
 			renderHeaderCell: () => "Recipe",
 			renderCell: (item) => <VariantPicker value={getVariant(item.variant)} onVariantChange={(variant) => onVariantChange(item, variant)} />,
 			compare: (a, b) => a.type.localeCompare(b.type),
 		}),
+		createTableColumn<Item>({
+			columnId: "instances",
+			renderHeaderCell: () => "Instances",
+			renderCell: (item) => item.instances.length,
+			compare: (a, b) => a.instances.length - b.instances.length,
+		})
 	], [onVariantChange]);
 }

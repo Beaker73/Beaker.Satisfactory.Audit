@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useDatabase } from "../../../Database/Hooks";
 import type { VariantEntry } from "../../../Database/Types";
 import { useWorldStore } from "../../../State";
-import type { Building } from "../../../State/Item";
+import type { Build } from "../../../State/Item";
 import type { DetailsViewProps } from "./Types";
 
 export function useDetailsViewState(props: DetailsViewProps)
@@ -16,7 +16,7 @@ export function useDetailsViewState(props: DetailsViewProps)
 	const items = children.filter(child => child.type === "item");
 	const groups = children.filter(child => child.type === "group");
 
-	const onVariantChange = useCallback((item: Building, variant: VariantEntry | undefined) => 
+	const onVariantChange = useCallback((item: Build, variant: VariantEntry | undefined) => 
 	{
 		updateVariant(item.id, variant?.key)
 	}, [updateVariant]);
