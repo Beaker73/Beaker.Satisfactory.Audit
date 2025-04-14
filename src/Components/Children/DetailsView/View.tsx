@@ -1,4 +1,4 @@
-import { createTableColumn, makeStyles, tokens } from "@fluentui/react-components";
+import { createTableColumn, makeStyles, SpinButton, tokens } from "@fluentui/react-components";
 import { useMemo } from "react";
 import { getVariant } from "../../../Database/Merge";
 import type { Item } from "../../../State/Item";
@@ -39,7 +39,7 @@ function useColumns(state: DetailsViewState)
 		createTableColumn<Item>({
 			columnId: "instances",
 			renderHeaderCell: () => "Instances",
-			renderCell: (item) => item.instances.length,
+			renderCell: (item) => <SpinButton value={item.instances.length} />,
 			compare: (a, b) => a.instances.length - b.instances.length,
 		})
 	], [onVariantChange]);
